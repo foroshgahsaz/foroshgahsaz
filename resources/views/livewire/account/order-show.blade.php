@@ -133,8 +133,9 @@
                     <h3 class="checkout-pay-group__title">پرداخت اعتباری</h3>
                     @foreach ($creditGateways as $gateway)
                         <label wire:key="remain-pay-{{ $gateway['name'] }}" class="checkout-option {{ $selectedGateway === $gateway['name'] ? 'checkout-option-active' : '' }}">
-                            <input type="radio" name="selectedGateway" wire:model.live="selectedGateway" value="{{ $gateway['name'] }}" class="checkout-option__radio shrink-0">
-                            <div>
+                            <input type="radio" name="selectedGateway" wire:model.live="selectedGateway" value="{{ $gateway['name'] }}" class="checkout-option__radio">
+                            <x-checkout-option-icon :src="$gateway['icon'] ?? null" :alt="$gateway['label']" />
+                            <div class="checkout-option__body">
                                 <p class="font-bold text-sm">{{ $gateway['label'] }}</p>
                                 <p class="text-xs text-gray-400 mt-0.5">{{ $gateway['description'] }}</p>
                             </div>
@@ -148,8 +149,9 @@
                     <h3 class="checkout-pay-group__title">درگاه‌های نقدی</h3>
                     @foreach ($cashGateways as $gateway)
                         <label wire:key="remain-pay-{{ $gateway['name'] }}" class="checkout-option {{ $selectedGateway === $gateway['name'] ? 'checkout-option-active' : '' }}">
-                            <input type="radio" name="selectedGateway" wire:model.live="selectedGateway" value="{{ $gateway['name'] }}" class="checkout-option__radio shrink-0">
-                            <div>
+                            <input type="radio" name="selectedGateway" wire:model.live="selectedGateway" value="{{ $gateway['name'] }}" class="checkout-option__radio">
+                            <x-checkout-option-icon :src="$gateway['icon'] ?? null" :alt="$gateway['label']" />
+                            <div class="checkout-option__body">
                                 <p class="font-bold text-sm">{{ $gateway['label'] }}</p>
                                 <p class="text-xs text-gray-400 mt-0.5">{{ $gateway['description'] }}</p>
                             </div>

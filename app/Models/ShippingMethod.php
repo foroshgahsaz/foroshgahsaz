@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ShopMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,8 +14,14 @@ class ShippingMethod extends Model
         'price',
         'free_shipping_threshold',
         'estimated_days',
+        'icon',
         'is_active',
     ];
+
+    public function iconUrl(): ?string
+    {
+        return ShopMedia::url($this->icon);
+    }
 
     protected function casts(): array
     {

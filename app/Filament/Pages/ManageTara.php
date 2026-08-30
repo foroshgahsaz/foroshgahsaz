@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Support\CrudSuccessNotification;
+use App\Filament\Support\ShopIconUpload;
 use App\Services\Settings\SettingsService;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -53,6 +54,7 @@ class ManageTara extends Page implements HasForms
             'refund_password' => $tara['refund_password'],
             'sandbox_refund_base_url' => $tara['sandbox_refund_base_url'],
             'refund_base_url' => $tara['production_refund_base_url'],
+            'icon' => ShopIconUpload::forForm($tara['icon'] ?? null),
         ]);
     }
 
@@ -82,6 +84,8 @@ class ManageTara extends Page implements HasForms
                         ->label('IP سرور پذیرنده')
                         ->placeholder('مثال: 1.2.3.4')
                         ->helperText('IP سفیدشده نزد تارا. اگر خالی باشد از IP درخواست استفاده می‌شود'),
+                    ShopIconUpload::make('icon', 'gateway-icons', 'آیکون درگاه')
+                        ->columnSpanFull(),
                 ])->columns(2),
                 Forms\Components\Section::make('خرید آنلاین')->schema([
                     Forms\Components\TextInput::make('username')
@@ -151,6 +155,7 @@ class ManageTara extends Page implements HasForms
             'refund_password' => $data['refund_password'] ?? '',
             'sandbox_refund_base_url' => $data['sandbox_refund_base_url'] ?? '',
             'refund_base_url' => $data['refund_base_url'] ?? '',
+            'icon' => ShopIconUpload::fromState($data['icon'] ?? null),
         ]);
 
         CrudSuccessNotification::saved()

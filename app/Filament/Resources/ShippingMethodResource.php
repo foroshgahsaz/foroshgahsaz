@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ShippingMethodResource\Pages;
+use App\Filament\Support\AdminImageColumn;
+use App\Filament\Support\ShopIconUpload;
 use App\Models\ShippingMethod;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -29,6 +31,7 @@ class ShippingMethodResource extends Resource
         return $form->schema([
             Forms\Components\TextInput::make('name')->label('نام')->required(),
             Forms\Components\Textarea::make('description')->label('توضیحات'),
+            ShopIconUpload::make('icon', 'shipping-icons', 'آیکون روش ارسال'),
             Forms\Components\TextInput::make('price')->label('هزینه')->numeric()->required(),
             Forms\Components\TextInput::make('free_shipping_threshold')->label('آستانه ارسال رایگان')->numeric(),
             Forms\Components\TextInput::make('estimated_days')->label('زمان تحویل (روز)')->numeric(),
@@ -39,6 +42,7 @@ class ShippingMethodResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
+            AdminImageColumn::make('icon', 40, 'آیکون'),
             Tables\Columns\TextColumn::make('name')->label('نام'),
             Tables\Columns\TextColumn::make('price')->label('هزینه')->numeric(),
             Tables\Columns\IconColumn::make('is_active')->label('فعال')->boolean(),
