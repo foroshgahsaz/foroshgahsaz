@@ -25,7 +25,23 @@ class CheckoutPage extends Component
 
     public ?string $note = null;
 
-    public function mount(PaymentGatewayCatalog $catalog): void
+    public bool $showAddressForm = false;
+
+    public string $receiver_name = '';
+
+    public string $receiver_phone = '';
+
+    public string $province = '';
+
+    public string $city = '';
+
+    public string $address = '';
+
+    public string $postal_code = '';
+
+    public bool $is_default = false;
+
+    public function mount(PaymentGatewayCatalog $catalog, ShopCacheService $cache): void
     {
         if (! auth()->check()) {
             redirect()->setIntendedUrl(route('checkout'));
@@ -35,6 +51,53 @@ class CheckoutPage extends Component
         }
 
         $this->paymentMethod = $this->defaultPaymentMethod($catalog);
+
+        $addresses = auth()->user()->addresses;
+        $default = $addresses->firstWhere('is_default', true) ?? $addresses->first();
+
+        if ($default) {
+            $this->addressId = $default->id;
+        } else {
+            $this->showAddressForm = true;
+            $this->prefillAddressFromProfile();
+        }
+
+        $shipping = $cache->shippingMethods()->sortBy('price')->first();
+        if ($shipping) {
+            $this->shippingMethodId = $shipping->id;
+        }
+    }
+
+    public function toggleAddressForm(): void
+    {
+        $this->showAddressForm = ! $this->showAddressForm;
+
+        if ($this->showAddressForm) {
+            $this->prefillAddressFromProfile();
+
+            return;
+        }
+
+        $this->resetAddressFields();
+    }
+
+    public function saveAddress(): void
+    {
+        $validated = $this->validate($this->addressRules());
+
+        $user = auth()->user();
+        $isFirst = $user->addresses()->doesntExist();
+
+        if ($isFirst || $this->is_default) {
+            $user->addresses()->update(['is_default' => false]);
+            $validated['is_default'] = true;
+        }
+
+        $address = $user->addresses()->create($validated);
+
+        $this->addressId = $address->id;
+        $this->showAddressForm = false;
+        $this->resetAddressFields();
     }
 
     public function placeOrder(CheckoutService $checkout, PaymentService $payment, PaymentGatewayCatalog $catalog): void
@@ -92,7 +155,7 @@ class CheckoutPage extends Component
         return view('livewire.checkout.checkout-page', [
             'preview' => $preview,
             'error' => $error,
-            'addresses' => auth()->user()->addresses,
+            'addresses' => auth()->user()->addresses()->latest()->get(),
             'shippingMethods' => $cache->shippingMethods(),
             'creditGateways' => $catalog->credit(),
             'cashGateways' => $catalog->cash(),
@@ -126,6 +189,20 @@ class CheckoutPage extends Component
         return $rules;
     }
 
+    /** @return array<string, mixed> */
+    protected function addressRules(): array
+    {
+        return [
+            'receiver_name' => ['required', 'string', 'max:255'],
+            'receiver_phone' => ['required', 'string', 'max:15'],
+            'province' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string'],
+            'postal_code' => ['required', 'string', 'max:10'],
+            'is_default' => ['boolean'],
+        ];
+    }
+
     /** @return array<string, string> */
     protected function messages(): array
     {
@@ -136,6 +213,12 @@ class CheckoutPage extends Component
             'shippingMethodId.exists' => 'روش ارسال معتبر نیست.',
             'paymentMethod.required' => 'روش پرداخت را انتخاب کنید.',
             'paymentMethod.in' => 'روش پرداخت معتبر نیست.',
+            'receiver_name.required' => 'نام گیرنده را وارد کنید.',
+            'receiver_phone.required' => 'موبایل گیرنده را وارد کنید.',
+            'province.required' => 'استان را وارد کنید.',
+            'city.required' => 'شهر را وارد کنید.',
+            'address.required' => 'آدرس کامل را وارد کنید.',
+            'postal_code.required' => 'کد پستی را وارد کنید.',
         ];
     }
 
@@ -152,5 +235,31 @@ class CheckoutPage extends Component
         }
 
         return 'cod';
+    }
+
+    protected function prefillAddressFromProfile(): void
+    {
+        $user = auth()->user();
+
+        if ($this->receiver_name === '') {
+            $this->receiver_name = (string) ($user->name ?? '');
+        }
+
+        if ($this->receiver_phone === '') {
+            $this->receiver_phone = (string) ($user->phone ?? '');
+        }
+    }
+
+    protected function resetAddressFields(): void
+    {
+        $this->reset([
+            'receiver_name',
+            'receiver_phone',
+            'province',
+            'city',
+            'address',
+            'postal_code',
+            'is_default',
+        ]);
     }
 }

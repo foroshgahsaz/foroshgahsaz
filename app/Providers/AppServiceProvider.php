@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\SmsSender;
 use App\Filament\Support\CrudSuccessNotification;
+use App\Http\Controllers\LivewireFileUploadController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\HomeSlider;
@@ -37,16 +38,22 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ViewAction;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Features\SupportFileUploads\FileUploadController;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->app->bind(FileUploadController::class, LivewireFileUploadController::class);
+
         $this->app->bind(SmsSender::class, function () {
             $kavenegar = app(SettingsService::class)->kavenegar();
 
@@ -71,10 +78,7 @@ class AppServiceProvider extends ServiceProvider
             URL::forceRootUrl(rtrim(request()->root(), '/'));
         }
 
-        $livewireTmp = storage_path('app/public/livewire-tmp');
-        if (! is_dir($livewireTmp)) {
-            mkdir($livewireTmp, 0755, true);
-        }
+        Storage::disk('public')->makeDirectory('livewire-tmp');
 
         Product::observe(ProductObserver::class);
         ProductImage::observe(ProductImageObserver::class);
@@ -144,9 +148,21 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole() || request()->is('admin', 'admin/*')) {
             FileUpload::configureUsing(function (FileUpload $component): void {
                 $component
-                    ->fetchFileInformation(true)
+                    ->fetchFileInformation(false)
                     ->maxSize(51200)
-                    ->imagePreviewHeight('150');
+                    ->imagePreviewHeight('150')
+                    ->helperText('حداکثر ۵۰ مگابایت. اگر خطا دیدید، نام فایل را کوتاه کنید و دوباره انتخاب کنید.')
+                    ->rule(static function () {
+                        return static function (string $attribute, mixed $value, \Closure $fail): void {
+                            foreach (Arr::wrap($value) as $file) {
+                                if ($file instanceof TemporaryUploadedFile && ! $file->isValid()) {
+                                    $fail('فایل آپلود نشد. نام فایل را کوتاه کنید، دوباره انتخاب کنید و تا پایان آپلود صبر کنید.');
+
+                                    return;
+                                }
+                            }
+                        };
+                    });
             });
         }
     }

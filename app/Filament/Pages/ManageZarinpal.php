@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Support\CrudSuccessNotification;
+use App\Filament\Support\ShopIconUpload;
 use App\Services\Settings\SettingsService;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -42,6 +43,7 @@ class ManageZarinpal extends Page implements HasForms
             'sandbox' => $zarinpal['sandbox'],
             'callback_url' => $zarinpal['callback_url'],
             'amount_unit' => $zarinpal['amount_unit'],
+            'icon' => ShopIconUpload::forForm($zarinpal['icon'] ?? null),
         ]);
     }
 
@@ -70,6 +72,8 @@ class ManageZarinpal extends Page implements HasForms
                         ->label('آدرس Callback')
                         ->placeholder('/payment/callback')
                         ->helperText('مسیر بازگشت از درگاه پس از پرداخت'),
+                    ShopIconUpload::make('icon', 'gateway-icons', 'آیکون درگاه')
+                        ->columnSpanFull(),
                 ])->columns(2),
             ])
             ->statePath('data');
@@ -85,6 +89,7 @@ class ManageZarinpal extends Page implements HasForms
             'sandbox' => $data['sandbox'] ?? true,
             'callback_url' => $data['callback_url'] ?? '/payment/callback',
             'amount_unit' => $data['amount_unit'] ?? 'toman',
+            'icon' => ShopIconUpload::fromState($data['icon'] ?? null),
         ]);
 
         CrudSuccessNotification::saved()

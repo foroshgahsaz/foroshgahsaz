@@ -58,6 +58,7 @@ class SettingsService
             'callback_url' => $this->get('zarinpal', 'callback_url') ?: config('payment.gateways.zarinpal.callback_url'),
             'amount_unit' => $this->get('zarinpal', 'amount_unit') ?: config('payment.gateways.zarinpal.amount_unit', 'toman'),
             'enabled' => filter_var($this->get('zarinpal', 'enabled', true), FILTER_VALIDATE_BOOLEAN),
+            'icon' => $this->get('zarinpal', 'icon') ?: null,
         ];
     }
 
@@ -93,6 +94,7 @@ class SettingsService
             'production_base_url' => (string) ($this->get('tara', 'base_url') ?: ($cfg['base_url'] ?? '')),
             'sandbox_refund_base_url' => (string) ($this->get('tara', 'sandbox_refund_base_url') ?: ($cfg['sandbox_refund_base_url'] ?? '')),
             'production_refund_base_url' => (string) ($this->get('tara', 'refund_base_url') ?: ($cfg['refund_base_url'] ?? '')),
+            'icon' => $this->get('tara', 'icon') ?: null,
         ];
     }
 

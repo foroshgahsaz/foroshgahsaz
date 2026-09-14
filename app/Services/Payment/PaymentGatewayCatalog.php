@@ -3,6 +3,7 @@
 namespace App\Services\Payment;
 
 use App\Services\Settings\SettingsService;
+use App\Support\ShopMedia;
 use RuntimeException;
 
 class PaymentGatewayCatalog
@@ -38,6 +39,7 @@ class PaymentGatewayCatalog
             'label' => $config['label'] ?? $name,
             'description' => $config['description'] ?? '',
             'enabled' => $this->isEnabled($name),
+            'icon' => $this->iconUrl($name),
         ];
     }
 
@@ -91,6 +93,21 @@ class PaymentGatewayCatalog
     public function enabledNames(): array
     {
         return array_column($this->enabled(), 'name');
+    }
+
+    public function iconUrl(string $name): ?string
+    {
+        $path = match ($name) {
+            'zarinpal' => $this->settings->zarinpal()['icon'] ?? null,
+            'tara' => $this->settings->tara()['icon'] ?? null,
+            default => null,
+        };
+
+        if (! is_string($path) || $path === '') {
+            $path = config("payment.gateways.{$name}.icon");
+        }
+
+        return ShopMedia::url(is_string($path) ? $path : null);
     }
 
     public function assertEnabled(string $name): void
