@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Support\CrudSuccessNotification;
+use App\Filament\Support\GatewayCheckoutDisplayFields;
 use App\Filament\Support\GatewayHomepagePlanFields;
 use App\Filament\Support\ShopIconUpload;
 use App\Services\Payment\BajetReturnUrl;
@@ -56,6 +57,7 @@ class ManageBajetPay extends Page implements HasForms
             'default_product_type' => $bajet['default_product_type'],
             'default_brand' => $bajet['default_brand'],
             'icon' => ShopIconUpload::forForm($bajet['icon'] ?? null),
+            ...GatewayCheckoutDisplayFields::mountState($bajet),
             ...GatewayHomepagePlanFields::mountState($bajet),
         ]);
     }
@@ -134,6 +136,7 @@ class ManageBajetPay extends Page implements HasForms
                         ->default('general')
                         ->maxLength(64),
                 ])->columns(2),
+                GatewayCheckoutDisplayFields::section(),
                 GatewayHomepagePlanFields::section(),
             ])
             ->statePath('data');
@@ -172,6 +175,7 @@ class ManageBajetPay extends Page implements HasForms
             'default_product_type' => (string) ($data['default_product_type'] ?? '2'),
             'default_brand' => $data['default_brand'] ?? 'general',
             'icon' => ShopIconUpload::fromState($data['icon'] ?? null),
+            ...GatewayCheckoutDisplayFields::saveState($data),
             ...GatewayHomepagePlanFields::saveState($data),
         ]);
 

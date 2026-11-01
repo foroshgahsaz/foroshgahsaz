@@ -15,6 +15,7 @@
     use App\Filament\Pages\ManageTara;
     use App\Filament\Pages\ManageParsian;
     use App\Filament\Pages\ManageSadad;
+    use App\Filament\Pages\ManageCodPayment;
     use App\Filament\Pages\ManageZarinpal;
     use App\Filament\Resources\AttributeResource;
     use App\Filament\Resources\BrandResource;
@@ -245,9 +246,11 @@
                 'filament.admin.pages.digipay',
                 'filament.admin.pages.parsian',
                 'filament.admin.pages.sadad',
+                'filament.admin.pages.cod',
             ],
             'menus' => [
                 ['label' => 'درگاه‌های پرداخت', 'icon' => 'fa-plug', 'items' => [
+                    ['label' => 'پرداخت در محل', 'url' => ManageCodPayment::getUrl(), 'icon' => 'fa-truck'],
                     ['label' => 'زرین‌پال', 'url' => ManageZarinpal::getUrl(), 'icon' => 'fa-university'],
                     ['label' => 'پارسیان', 'url' => ManageParsian::getUrl(), 'icon' => 'fa-building-columns'],
                     ['label' => 'سداد', 'url' => ManageSadad::getUrl(), 'icon' => 'fa-building-columns'],

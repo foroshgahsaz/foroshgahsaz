@@ -239,6 +239,7 @@ class CheckoutPage extends Component
                 'shippingMethods' => $cache->shippingMethods(),
                 'creditGateways' => $catalog->credit(),
                 'cashGateways' => $catalog->cash(),
+                'codPayment' => $catalog->codEnabled() ? $catalog->codDefinition() : null,
                 'awaitingLogin' => true,
                 'provinces' => collect(),
                 'cities' => collect(),
@@ -268,6 +269,7 @@ class CheckoutPage extends Component
             'shippingMethods' => $cache->shippingMethods(),
             'creditGateways' => $catalog->credit(),
             'cashGateways' => $catalog->cash(),
+            'codPayment' => $catalog->codEnabled() ? $catalog->codDefinition() : null,
             'awaitingLogin' => false,
             'provinces' => Province::query()->orderBy('position')->get(['id', 'name']),
             'cities' => $this->checkoutCities(),
@@ -278,7 +280,10 @@ class CheckoutPage extends Component
     /** @return array<string, mixed> */
     protected function checkoutRules(PaymentGatewayCatalog $catalog): array
     {
-        $allowed = array_merge(['cod'], $catalog->enabledNames());
+        $allowed = $catalog->enabledNames();
+        if ($catalog->codEnabled()) {
+            $allowed[] = 'cod';
+        }
 
         $rules = [
             'addressId' => [
@@ -354,7 +359,13 @@ class CheckoutPage extends Component
             return $credit[0]['name'];
         }
 
-        return 'cod';
+        if ($catalog->codEnabled()) {
+            return 'cod';
+        }
+
+        $names = $catalog->enabledNames();
+
+        return $names[0] ?? 'zarinpal';
     }
 
     protected function prefillAddressFromProfile(): void

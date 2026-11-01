@@ -124,7 +124,9 @@ class OrderResource extends Resource
             $options[$name] = (string) ($gateway['label'] ?? ShopLabels::gateway($name));
         }
 
-        $options['cod'] = ShopLabels::paymentMethod('cod');
+        if (app(PaymentGatewayCatalog::class)->codEnabled()) {
+            $options['cod'] = ShopLabels::paymentMethod('cod');
+        }
 
         return $options;
     }

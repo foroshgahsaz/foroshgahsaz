@@ -125,7 +125,7 @@ class CouponService
         $labels = [];
         foreach ($gatewayNames as $name) {
             if ($name === 'cod') {
-                $labels[] = 'پرداخت در محل';
+                $labels[] = $this->gateways->codDefinition()['label'];
                 continue;
             }
             $labels[] = $this->gateways->definition($name)['label'] ?? $name;

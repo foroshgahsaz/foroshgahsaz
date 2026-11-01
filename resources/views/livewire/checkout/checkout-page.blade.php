@@ -207,17 +207,23 @@
                                 </div>
                             @endif
 
-                            <div class="checkout-pay-group">
-                                <h3 class="checkout-pay-group__title">سایر روش‌ها</h3>
-                                <label class="checkout-option {{ $paymentMethod === 'cod' ? 'checkout-option-active' : '' }}">
-                                    <input type="radio" name="paymentMethod" wire:model.live="paymentMethod" value="cod" class="checkout-option__radio">
-                                    <span class="checkout-option__icon checkout-option__icon--cod" aria-hidden="true"></span>
-                                    <div class="checkout-option__body">
-                                        <p class="font-bold text-sm">پرداخت در محل</p>
-                                        <p class="text-xs text-gray-400 mt-0.5">هنگام تحویل</p>
-                                    </div>
-                                </label>
-                            </div>
+                            @if ($codPayment ?? null)
+                                <div class="checkout-pay-group">
+                                    <h3 class="checkout-pay-group__title">سایر روش‌ها</h3>
+                                    <label class="checkout-option {{ $paymentMethod === 'cod' ? 'checkout-option-active' : '' }}">
+                                        <input type="radio" name="paymentMethod" wire:model.live="paymentMethod" value="cod" class="checkout-option__radio">
+                                        @if (! empty($codPayment['icon']))
+                                            <x-checkout-option-icon :src="$codPayment['icon']" :alt="$codPayment['label']" />
+                                        @else
+                                            <span class="checkout-option__icon checkout-option__icon--cod" aria-hidden="true"></span>
+                                        @endif
+                                        <div class="checkout-option__body">
+                                            <p class="font-bold text-sm">{{ $codPayment['label'] }}</p>
+                                            <p class="text-xs text-gray-400 mt-0.5">{{ $codPayment['description'] }}</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            @endif
                             @error('paymentMethod') <span class="checkout-field-error">{{ $message }}</span> @enderror
                         </section>
                     </div>
