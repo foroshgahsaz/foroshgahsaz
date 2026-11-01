@@ -69,7 +69,11 @@ class CouponResource extends Resource
     protected static function paymentGatewayOptions(): array
     {
         $catalog = app(PaymentGatewayCatalog::class);
-        $options = ['cod' => 'پرداخت در محل'];
+        $options = [];
+
+        if ($catalog->codEnabled()) {
+            $options['cod'] = (string) $catalog->codDefinition()['label'];
+        }
 
         foreach ($catalog->enabled() as $gateway) {
             $options[$gateway['name']] = (string) $gateway['label'];

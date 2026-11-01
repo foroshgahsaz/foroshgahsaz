@@ -32,6 +32,9 @@ class SettingsService
     /** @var array<string, mixed>|null */
     protected static ?array $sadadMemo = null;
 
+    /** @var array<string, mixed>|null */
+    protected static ?array $codMemo = null;
+
     public function get(string $group, string $key, mixed $default = null): mixed
     {
         $settings = $this->all();
@@ -54,8 +57,9 @@ class SettingsService
         static::$digipayMemo = null;
         static::$parsianMemo = null;
         static::$sadadMemo = null;
+        static::$codMemo = null;
 
-        if (in_array($group, ['zarinpal', 'tara', 'bajet', 'digipay', 'parsian', 'sadad', 'homepage'], true)) {
+        if (in_array($group, ['zarinpal', 'tara', 'bajet', 'digipay', 'parsian', 'sadad', 'cod', 'homepage'], true)) {
             app(ShopCacheService::class)->forgetHome();
         }
     }
@@ -97,6 +101,7 @@ class SettingsService
             'amount_unit' => $this->get('zarinpal', 'amount_unit') ?: config('payment.gateways.zarinpal.amount_unit', 'toman'),
             'enabled' => filter_var($this->get('zarinpal', 'enabled', true), FILTER_VALIDATE_BOOLEAN),
             'icon' => $this->get('zarinpal', 'icon') ?: null,
+            ...$this->gatewayCheckoutDisplayFields('zarinpal'),
             ...$this->gatewayHomepagePlanFields('zarinpal'),
         ];
     }
@@ -138,6 +143,7 @@ class SettingsService
             'sandbox_refund_base_url' => (string) ($this->get('tara', 'sandbox_refund_base_url') ?: ($cfg['sandbox_refund_base_url'] ?? '')),
             'production_refund_base_url' => (string) ($this->get('tara', 'refund_base_url') ?: ($cfg['refund_base_url'] ?? '')),
             'icon' => $this->get('tara', 'icon') ?: null,
+            ...$this->gatewayCheckoutDisplayFields('tara'),
             ...$this->gatewayHomepagePlanFields('tara'),
         ];
     }
@@ -173,6 +179,7 @@ class SettingsService
             'portal_sandbox_base_url' => (string) ($this->get('bajet', 'portal_sandbox_base_url') ?: ($cfg['portal_sandbox_base_url'] ?? '')),
             'portal_base_url' => (string) ($this->get('bajet', 'portal_base_url') ?: ($cfg['portal_base_url'] ?? '')),
             'icon' => $this->get('bajet', 'icon') ?: null,
+            ...$this->gatewayCheckoutDisplayFields('bajet'),
             ...$this->gatewayHomepagePlanFields('bajet'),
         ];
     }
@@ -214,6 +221,7 @@ class SettingsService
             ),
             'product_installment_promo_text' => (string) ($this->get('digipay', 'product_installment_promo_text')
                 ?: 'این درگاه اعتباری دیجی‌پی در ۴ قسط'),
+            ...$this->gatewayCheckoutDisplayFields('digipay'),
             ...$this->gatewayHomepagePlanFields('digipay'),
         ];
     }
@@ -233,6 +241,7 @@ class SettingsService
             'amount_unit' => (string) ($this->get('parsian', 'amount_unit') ?: ($cfg['amount_unit'] ?? 'toman')),
             'callback_url' => (string) ($this->get('parsian', 'callback_url') ?: ($cfg['callback_url'] ?? '/payment/callback/pec')),
             'icon' => $this->get('parsian', 'icon') ?: null,
+            ...$this->gatewayCheckoutDisplayFields('parsian'),
             ...$this->gatewayHomepagePlanFields('parsian'),
         ];
     }
@@ -254,7 +263,32 @@ class SettingsService
             'amount_unit' => (string) ($this->get('sadad', 'amount_unit') ?: ($cfg['amount_unit'] ?? 'toman')),
             'callback_url' => (string) ($this->get('sadad', 'callback_url') ?: ($cfg['callback_url'] ?? '/payment/callback/sadad')),
             'icon' => $this->get('sadad', 'icon') ?: null,
+            ...$this->gatewayCheckoutDisplayFields('sadad'),
             ...$this->gatewayHomepagePlanFields('sadad'),
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    public function cod(): array
+    {
+        if (static::$codMemo !== null) {
+            return static::$codMemo;
+        }
+
+        return static::$codMemo = [
+            'enabled' => filter_var($this->get('cod', 'enabled', true), FILTER_VALIDATE_BOOLEAN),
+            'display_label' => (string) ($this->get('cod', 'display_label') ?: ''),
+            'display_description' => (string) ($this->get('cod', 'display_description') ?: ''),
+            'icon' => $this->get('cod', 'icon') ?: null,
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    protected function gatewayCheckoutDisplayFields(string $group): array
+    {
+        return [
+            'display_label' => (string) ($this->get($group, 'display_label') ?: ''),
+            'display_description' => (string) ($this->get($group, 'display_description') ?: ''),
         ];
     }
 

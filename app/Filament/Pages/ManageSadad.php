@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Support\CrudSuccessNotification;
+use App\Filament\Support\GatewayCheckoutDisplayFields;
 use App\Filament\Support\GatewayHomepagePlanFields;
 use App\Filament\Support\ShopIconUpload;
 use App\Services\Payment\SadadReturnUrl;
@@ -47,6 +48,7 @@ class ManageSadad extends Page implements HasForms
             'callback_url' => $sadad['callback_url'],
             'amount_unit' => $sadad['amount_unit'],
             'icon' => ShopIconUpload::forForm($sadad['icon'] ?? null),
+            ...GatewayCheckoutDisplayFields::mountState($sadad),
             ...GatewayHomepagePlanFields::mountState($sadad),
         ]);
     }
@@ -86,6 +88,7 @@ class ManageSadad extends Page implements HasForms
                     ShopIconUpload::make('icon', 'gateway-icons', 'آیکون درگاه')
                         ->columnSpanFull(),
                 ])->columns(2),
+                GatewayCheckoutDisplayFields::section(),
                 GatewayHomepagePlanFields::section(),
             ])
             ->statePath('data');
@@ -107,6 +110,7 @@ class ManageSadad extends Page implements HasForms
             'callback_url' => $callbackPath,
             'amount_unit' => $data['amount_unit'] ?? 'toman',
             'icon' => ShopIconUpload::fromState($data['icon'] ?? null),
+            ...GatewayCheckoutDisplayFields::saveState($data),
             ...GatewayHomepagePlanFields::saveState($data),
         ]);
 

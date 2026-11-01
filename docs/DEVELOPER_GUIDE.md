@@ -554,9 +554,13 @@ $catalog->cash();     // فقط type=cash (زرین‌پال)
 $catalog->credit();   // فقط type=credit (تارا)
 $catalog->enabled();  // همه enabled
 $catalog->iconUrl('zarinpal');  // از settings + ShopMedia
+$catalog->codEnabled();  // پرداخت در محل (COD) — از settings گروه `cod`
+$catalog->codDefinition();  // label/description/icon COD برای checkout
 ```
 
-**Checkout:** `CheckoutPage` + `PaymentGatewayCatalog`  
+**نام نمایشی:** فیلدهای `display_label` / `display_description` در settings هر درگاه (بخش «نمایش در تسویه حساب» در admin)؛ اگر خالی باشد از `config/payment.php` استفاده می‌شود.
+
+**Checkout:** `CheckoutPage` + `PaymentGatewayCatalog` — COD فقط وقتی `cod.enabled` در admin روشن باشد  
 **Account pay again:** `OrderShow` — cash/credit جدا
 
 ### 9.7 آیکون درگاه و ارسال
@@ -575,6 +579,7 @@ Sidebar: `resources/views/filament/partials/admin-sidebar.blade.php` — panel �
 
 | صفحه | slug admin |
 |------|------------|
+| پرداخت در محل (COD) | `/admin/cod` |
 | زرین‌پال | `/admin/zarinpal` |
 | تارا | `/admin/tara` |
 | سداد | `/admin/sadad` |
@@ -1285,6 +1290,7 @@ resources/views/layouts/shop.blade.php
 
 | تاریخ | توضیح |
 |-------|--------|
+| 2026-11-01 | **COD و نام درگاه:** `/admin/cod` (فعال/غیرفعال، عنوان، توضیح، آیکون)؛ هر درگاه → بخش «نمایش در تسویه حساب» (`display_label` / `display_description`)؛ `PaymentGatewayCatalog` + checkout + فیلتر سفارش/کوپن |
 | 2026-08-23 | نسخه اول — راهنمای جامع offline |
 | 2026-08-23 | نسخه 1.1 — تکمیل درگاه‌ها، variant، coupon، settings، SEO، tests |
 | 2026-10-01 | نسخه 1.2 — لینک به docs/README، مدیر فروش، `/admin/login` |

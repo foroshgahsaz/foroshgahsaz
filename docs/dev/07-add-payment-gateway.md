@@ -61,10 +61,12 @@
 
 - متد `mygateway(): array` با `enabled`, `merchant_*`, `callback_url`, `icon`, ...
 - از `$this->get('mygateway', 'key', default)` استفاده کنید.
+- در انتهای آرایه: `...$this->gatewayCheckoutDisplayFields('mygateway')` برای نام/توضیح checkout.
 
 **صفحه Filament (الگو):**
 
 - کپی از `app/Filament/Pages/ManageZarinpal.php` → `ManageMyGateway.php`
+- در فرم: `GatewayCheckoutDisplayFields::section()` + `mountState` / `saveState` (مثل زرین‌پال)
 - ثبت در `app/Providers/Filament/AdminPanelProvider.php` → `->pages([...])`
 - لینک در `resources/views/filament/partials/admin-sidebar.blade.php` (پنل «درگاه‌ها»)
 - فقط **مدیر کامل** — مدیر فروش به درگاه‌ها دسترسی ندارد.

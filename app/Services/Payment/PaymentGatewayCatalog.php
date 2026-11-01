@@ -43,14 +43,57 @@ class PaymentGatewayCatalog
     public function definition(string $name): array
     {
         $config = config("payment.gateways.{$name}", []);
+        $settings = $this->settingsForGateway($name);
+
+        $label = trim((string) ($settings['display_label'] ?? ''));
+        if ($label === '') {
+            $label = (string) ($config['label'] ?? $name);
+        }
+
+        $description = trim((string) ($settings['display_description'] ?? ''));
+        if ($description === '') {
+            $description = (string) ($config['description'] ?? '');
+        }
 
         return [
             'name' => $name,
             'type' => $config['type'] ?? self::TYPE_CASH,
-            'label' => $config['label'] ?? $name,
-            'description' => $config['description'] ?? '',
+            'label' => $label,
+            'description' => $description,
             'enabled' => $this->isEnabled($name),
             'icon' => $this->iconUrl($name),
+        ];
+    }
+
+    public function codEnabled(): bool
+    {
+        return (bool) ($this->settings->cod()['enabled'] ?? true);
+    }
+
+    /** @return array<string, mixed> */
+    public function codDefinition(): array
+    {
+        $cod = $this->settings->cod();
+
+        $label = trim((string) ($cod['display_label'] ?? ''));
+        if ($label === '') {
+            $label = 'پرداخت در محل';
+        }
+
+        $description = trim((string) ($cod['display_description'] ?? ''));
+        if ($description === '') {
+            $description = 'هنگام تحویل';
+        }
+
+        $iconPath = $cod['icon'] ?? null;
+
+        return [
+            'name' => 'cod',
+            'type' => self::TYPE_CASH,
+            'label' => $label,
+            'description' => $description,
+            'enabled' => $this->codEnabled(),
+            'icon' => ShopMedia::url(is_string($iconPath) && $iconPath !== '' ? $iconPath : null),
         ];
     }
 
@@ -149,7 +192,6 @@ class PaymentGatewayCatalog
                 $planUrl = url($planUrl);
             }
 
-            $config = config("payment.gateways.{$name}", []);
             $intro = trim((string) ($settings['homepage_intro'] ?? ''));
             if ($intro === '') {
                 $intro = GatewayHomepagePlanFields::DEFAULT_INTRO;
@@ -157,7 +199,7 @@ class PaymentGatewayCatalog
 
             $cards[] = [
                 'name' => $name,
-                'label' => (string) ($config['label'] ?? $name),
+                'label' => (string) ($this->definition($name)['label'] ?? $name),
                 'intro' => $intro,
                 'plan_url' => $planUrl,
                 'icon' => $this->iconUrl($name),
@@ -201,5 +243,19 @@ class PaymentGatewayCatalog
         if (! $this->isEnabled($name)) {
             throw new RuntimeException('این درگاه پرداخت فعال نیست.');
         }
+    }
+
+    /** @return array<string, mixed> */
+    protected function settingsForGateway(string $name): array
+    {
+        return match ($name) {
+            'zarinpal' => $this->settings->zarinpal(),
+            'tara' => $this->settings->tara(),
+            'bajet' => $this->settings->bajet(),
+            'digipay' => $this->settings->digipay(),
+            'parsian' => $this->settings->parsian(),
+            'sadad' => $this->settings->sadad(),
+            default => [],
+        };
     }
 }

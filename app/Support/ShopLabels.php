@@ -5,6 +5,7 @@ namespace App\Support;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Services\Payment\AmountConverter;
+use App\Services\Payment\PaymentGatewayCatalog;
 
 class ShopLabels
 {
@@ -42,13 +43,24 @@ class ShopLabels
             return '—';
         }
 
-        $label = config("payment.gateways.{$method}.label");
-
         return match ($method) {
             'online' => 'پرداخت آنلاین',
-            'cod' => 'پرداخت در محل',
-            default => is_string($label) && $label !== '' ? $label : self::gateway($method),
+            'cod' => app(PaymentGatewayCatalog::class)->codDefinition()['label'],
+            default => self::gatewayLabelFromCatalog($method),
         };
+    }
+
+    protected static function gatewayLabelFromCatalog(string $method): string
+    {
+        $catalog = app(PaymentGatewayCatalog::class);
+
+        if ($catalog->exists($method)) {
+            return (string) ($catalog->definition($method)['label'] ?? self::gateway($method));
+        }
+
+        $label = config("payment.gateways.{$method}.label");
+
+        return is_string($label) && $label !== '' ? $label : self::gateway($method);
     }
 
     /** برچسب روش پرداخت سفارش (لیست ادمین): درگاه واقعی از payments اگر orders.payment_method=online باشد. */
