@@ -289,7 +289,8 @@ class ProductResource extends Resource
                     ->sortable()
                     ->width('6.5rem')
                     ->grow(false)
-                    ->wrap(false),
+                    ->wrap(false)
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([
