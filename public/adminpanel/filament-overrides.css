@@ -505,13 +505,20 @@ body.fi-body .tippy-box {
 
 /* ===== Main content (Filament pages) ===== */
 .fi-admin-shell .content-area {
-    padding: 0 0 0 30px !important;
+    padding-block: 0 !important;
+    padding-inline-start: 0 !important;
+    padding-inline-end: 24px !important;
 }
 
 .fi-admin-shell .content-area .fi-main {
     max-width: 100% !important;
+    width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
+}
+
+.fi-admin-shell .content-area .fi-main.mx-auto {
+    margin-inline: 0 !important;
 }
 
 .fi-admin-shell .content-area .fi-page > section {
@@ -867,14 +874,16 @@ body.fi-body .fi-no-notification-icon {
     align-items: center;
     gap: 12px;
     height: 85px;
-    padding: 0 24px;
+    padding-block: 0;
+    padding-inline-start: 0;
+    padding-inline-end: 24px;
     background: #fff;
     border-bottom: 1px solid #eff2f5;
     position: sticky;
     top: 0;
     z-index: 700;
     box-sizing: border-box;
-    border-right: 1px solid #eff2f5;
+    border-inline-start: 1px solid #eff2f5;
 }
 
 .admin-top-bar__primary {
@@ -995,11 +1004,13 @@ body.fi-body .fi-no-notification-icon {
     align-items: center !important;
     justify-content: space-between !important;
     gap: 12px 16px !important;
-    padding: 16px 24px 12px !important;
+    padding-block: 16px 12px !important;
+    padding-inline-start: 0 !important;
+    padding-inline-end: 24px !important;
     margin: 0 !important;
     background: white;
     border-bottom: 1px solid #eff2f5;
-    border-right: 1px solid #eff2f5;
+    border-inline-start: 1px solid #eff2f5;
 }
 
 .fi-admin-list-header__trail {
@@ -1044,12 +1055,14 @@ body.fi-body .fi-no-notification-icon {
 /* تب‌های مشتریان / مدیران */
 .fi-admin-shell .fi-resource-list-records-page .fi-tabs,
 .fi-admin-shell .fi-page .fi-tabs {
-    padding: 0 24px 12px;
+    padding-block: 0 12px;
+    padding-inline-start: 0;
+    padding-inline-end: 24px;
     margin-top: 0;
     margin-bottom: 0;
     background: #fff;
     border-bottom: 1px solid #eff2f5;
-    border-right: 1px solid #eff2f5;
+    border-inline-start: 1px solid #eff2f5;
     gap: 8px;
 }
 
@@ -1077,20 +1090,17 @@ body.fi-body .fi-no-notification-icon {
 }
 
 .fi-admin-shell .fi-resource-list-records-page .fi-ta-ctn {
-    margin: 0 24px 20px;
-    border-radius: 12px;
+    margin-block: 0 20px;
+    margin-inline: 0;
+    border-radius: 0 0 12px 12px;
     border: 1px solid #eff2f5;
+    border-inline-start: none;
     box-shadow: 0 4px 24px rgba(24, 28, 50, 0.04);
     overflow: hidden;
 }
 
 .fi-admin-shell .fi-resource-list-records-page .fi-ta-header-toolbar {
     border-radius: 12px 12px 0 0;
-}
-
-.fi-admin-shell .content-area {
-    padding-left: 24px !important;
-    padding-right: 0 !important;
 }
 
 @media (max-width: 991px) {
@@ -1995,7 +2005,7 @@ body.fi-panel-representative .fi-panel-representative {
 
 .fi-admin-shell .main-content {
     background: #fff;
-    border-right: 1px solid #eff2f5;
+    border-inline-start: 1px solid #eff2f5;
 }
 
 .fi-admin-shell .content-area,
@@ -2004,12 +2014,13 @@ body.fi-panel-representative .fi-panel-representative {
     background: #fff;
 }
 
-.fi-admin-shell .content-area {
-    padding: 20px 24px !important;
-}
-
 .fi-admin-shell .content-area .fi-page > header.fi-header:not(.fi-admin-list-header) {
     padding: 4px 0 16px !important;
+    padding-inline-end: 24px !important;
+}
+
+.fi-admin-shell .content-area .fi-page:not(.fi-resource-list-records-page) > section {
+    padding-inline-end: 24px !important;
 }
 
 .fi-admin-shell .fi-ta-header,
@@ -2035,7 +2046,9 @@ body.fi-panel-representative .fi-panel-representative {
 
 @media (max-width: 991px) {
     .fi-admin-shell .content-area {
-        padding: 16px !important;
+        padding-block: 0 !important;
+        padding-inline-start: 0 !important;
+        padding-inline-end: 16px !important;
     }
 }
 
