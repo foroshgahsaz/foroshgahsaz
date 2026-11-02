@@ -630,6 +630,18 @@ body.fi-body .fi-admin-shell .fi-wi-widget {
     border-color: #f1416c;
 }
 
+.fi-admin-shell .fi-ta-actions-cell .fi-icon-btn.fi-color-gray {
+    color: #1e1e2d;
+    border-color: #e4e6ef;
+    background: #f5f8fa;
+}
+
+.fi-admin-shell .fi-ta-actions-cell .fi-icon-btn.fi-color-gray:hover {
+    background: #1e1e2d;
+    color: #fff;
+    border-color: #1e1e2d;
+}
+
 .fi-admin-shell .fi-ta-header-cell-label {
     letter-spacing: 0.01em;
 }
