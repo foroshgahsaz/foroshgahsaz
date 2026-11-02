@@ -584,12 +584,12 @@ body.fi-body .fi-admin-shell .fi-wi-widget {
 }
 
 /* لیست محصولات — ردیف‌ها و ستون‌ها فشرده‌تر (مشابه نمونهٔ UI) */
-.fi-admin-shell .fi-resource-products .fi-ta-header-cell {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-header-cell {
     padding: 8px 10px !important;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-cell,
-.fi-admin-shell .fi-resource-products .fi-ta-actions-cell {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-actions-cell {
     padding: 6px 10px !important;
     line-height: 1.35;
 }
@@ -1256,7 +1256,9 @@ body.fi-body .fi-modal-slide-over-window-hiding {
     }
 
     .fi-admin-shell .content-area {
-        padding: 16px 14px !important;
+        padding-block: 0 !important;
+        padding-inline-start: 0 !important;
+        padding-inline-end: 14px !important;
     }
 
     .fi-admin-shell .fi-header {
@@ -1285,7 +1287,9 @@ body.fi-body .fi-modal-slide-over-window-hiding {
     }
 
     .fi-admin-shell .content-area {
-        padding: 12px 12px !important;
+        padding-block: 0 !important;
+        padding-inline-start: 0 !important;
+        padding-inline-end: 12px !important;
     }
 
     .fi-admin-shell .fi-ta-header-toolbar {
