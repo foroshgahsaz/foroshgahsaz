@@ -306,6 +306,14 @@ class ProductResource extends Resource
                     ->label('محصول ویژه'),
             ])
             ->actions([
+                Tables\Actions\Action::make('viewStorefront')
+                    ->label('نمایش محصول')
+                    ->icon('heroicon-o-eye')
+                    ->iconButton()
+                    ->color('gray')
+                    ->url(fn (Product $record): string => route('products.show', $record))
+                    ->openUrlInNewTab()
+                    ->visible(fn (Product $record): bool => filled($record->slug)),
                 Tables\Actions\EditAction::make()
                     ->label('ویرایش')
                     ->iconButton()
