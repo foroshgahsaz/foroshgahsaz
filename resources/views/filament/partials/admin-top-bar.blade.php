@@ -8,12 +8,14 @@
     }
 
     $initialCreate = $adminTopBarCreate ?? null;
+    $utilityLink = $adminTopBarUtilityLink ?? null;
 @endphp
 
 <div class="admin-top-bar"
      role="banner"
-     x-data="{ create: @js($initialCreate) }"
-     @admin-top-bar-create.window="create = $event.detail.create ?? null">
+     x-data="{ create: @js($initialCreate), utilityLink: @js($utilityLink) }"
+     @admin-top-bar-create.window="create = $event.detail.create ?? null"
+     @admin-top-bar-utility-link.window="utilityLink = $event.detail.link ?? null">
     <div class="admin-top-bar__primary">
         <template x-if="create && create.url">
             <a :href="create.url"
@@ -50,6 +52,15 @@
                 <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
             </button>
         </form>
+        <template x-if="utilityLink && utilityLink.url">
+            <a :href="utilityLink.url"
+               target="_blank"
+               rel="noopener"
+               class="fi-admin-global-btn fi-admin-global-btn-store fi-admin-global-btn-store--outline">
+                <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                <span x-text="utilityLink.label || 'مشاهده'"></span>
+            </a>
+        </template>
         <a href="{{ url('/') }}"
            target="_blank"
            rel="noopener"

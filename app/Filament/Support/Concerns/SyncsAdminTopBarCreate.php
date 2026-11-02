@@ -46,4 +46,25 @@ trait SyncsAdminTopBarCreate
             window.dispatchEvent(new CustomEvent('admin-top-bar-create', { detail: { create: null } }));
         JS);
     }
+
+    /** @param  array{url: string, label: string}|null  $link */
+    protected function syncAdminTopBarUtilityLink(?array $link): void
+    {
+        view()->share('adminTopBarUtilityLink', $link);
+
+        $encoded = json_encode($link, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+
+        $this->js(<<<JS
+            window.dispatchEvent(new CustomEvent('admin-top-bar-utility-link', { detail: { link: {$encoded} } }));
+        JS);
+    }
+
+    protected function clearAdminTopBarUtilityLink(): void
+    {
+        view()->share('adminTopBarUtilityLink', null);
+
+        $this->js(<<<'JS'
+            window.dispatchEvent(new CustomEvent('admin-top-bar-utility-link', { detail: { link: null } }));
+        JS);
+    }
 }

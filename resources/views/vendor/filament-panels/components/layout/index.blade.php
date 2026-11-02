@@ -19,6 +19,7 @@
             @unless (request()->routeIs('filament.representative.*'))
                 @include('filament.partials.admin-top-bar', [
                     'adminTopBarCreate' => view()->shared('adminTopBarCreate'),
+                    'adminTopBarUtilityLink' => view()->shared('adminTopBarUtilityLink'),
                 ])
             @endunless
             <div class="content-area">

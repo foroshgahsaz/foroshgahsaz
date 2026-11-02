@@ -13,6 +13,20 @@ class EditProduct extends BaseEditRecord
 
     protected static string $resource = ProductResource::class;
 
+    public function mount(int|string $record): void
+    {
+        parent::mount($record);
+
+        $product = $this->getRecord();
+
+        if (filled($product->slug)) {
+            $this->syncAdminTopBarUtilityLink([
+                'url' => route('products.show', $product),
+                'label' => 'نمایش محصول',
+            ]);
+        }
+    }
+
     public function hasCombinedRelationManagerTabsWithContentForm(): bool
     {
         return true;

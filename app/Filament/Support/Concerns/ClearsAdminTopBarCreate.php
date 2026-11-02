@@ -9,5 +9,6 @@ trait ClearsAdminTopBarCreate
     public function bootClearsAdminTopBarCreate(): void
     {
         $this->clearAdminTopBarCreate();
+        $this->clearAdminTopBarUtilityLink();
     }
 }
