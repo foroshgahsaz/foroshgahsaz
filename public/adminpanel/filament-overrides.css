@@ -35,15 +35,44 @@ body.fi-body .fi-field-wrp-label {
     font-family: Yekan, YekanBakh, Tahoma, Arial, sans-serif !important;
 }
 
-/* Filament checkbox / multi-select — Bootstrap RTL sometimes hides native controls */
-.fi-admin-shell .fi-checkbox-input {
+/* Filament checkbox — Bootstrap RTL + Tailwind preflight: checked tick must be explicit */
+.fi-admin-shell input.fi-checkbox-input,
+.fi-admin-shell .fi-ta-record-checkbox input[type='checkbox'],
+.fi-admin-shell .fi-dropdown-list input[type='checkbox'],
+.fi-admin-shell .fi-ta-col-toggle input[type='checkbox'] {
     width: 1.125rem !important;
     height: 1.125rem !important;
     flex-shrink: 0;
     cursor: pointer;
     opacity: 1 !important;
     position: relative !important;
-    accent-color: #7239ea;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 0.25rem !important;
+    background-color: #fff !important;
+    color: #7239ea !important;
+    vertical-align: middle;
+}
+
+.fi-admin-shell input.fi-checkbox-input:checked,
+.fi-admin-shell .fi-ta-record-checkbox input[type='checkbox']:checked,
+.fi-admin-shell .fi-dropdown-list input[type='checkbox']:checked,
+.fi-admin-shell .fi-ta-col-toggle input[type='checkbox']:checked {
+    background-color: #7239ea !important;
+    border-color: #7239ea !important;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m4 8 2.5 2.5L12 5'/%3E%3C/svg%3E") !important;
+    background-size: 100% 100% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.fi-admin-shell .fi-ta-icon {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 .fi-admin-shell .fi-fo-checkbox-list-option-label,
