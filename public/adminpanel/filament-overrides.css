@@ -68,11 +68,10 @@ body.fi-body .fi-field-wrp-label {
     background-repeat: no-repeat !important;
 }
 
-.fi-admin-shell .fi-ta-icon {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+/* Filament column wrappers ship with px-3 py-4 — overrides Tailwind padding on cells */
+.fi-admin-shell .fi-ta-icon,
+.fi-admin-shell .fi-ta-image {
+    padding: 0 !important;
 }
 
 .fi-admin-shell .fi-fo-checkbox-list-option-label,
@@ -592,6 +591,13 @@ body.fi-body .fi-admin-shell .fi-wi-widget {
 .fi-admin-shell .fi-resource-products .fi-ta-image {
     min-width: 2.75rem;
     width: 2.75rem;
+    padding: 0 !important;
+}
+
+.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-icon,
+.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-image,
+.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-text {
+    padding: 0 !important;
 }
 
 .fi-admin-shell .fi-resource-products img.fi-admin-table-thumb {
