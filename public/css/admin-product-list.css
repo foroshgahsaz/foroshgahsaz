@@ -1,6 +1,6 @@
-/* لیست محصولات ادمین — /admin/products — هماهنگ با بروزرسانی قیمت */
+/* لیست فشرده ادمین — محصولات، پرداخت‌ها و … */
 
-.fi-admin-shell .fi-resource-products {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) {
     --apl-primary: #7239ea;
     --apl-border: #e4e6ef;
     --apl-muted: #7e8299;
@@ -9,16 +9,16 @@
     --apl-filter-border: #e9e3ff;
 }
 
-.fi-admin-shell .fi-resource-products .fi-admin-list-header {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-admin-list-header {
     background: linear-gradient(180deg, var(--apl-filter-bg) 0%, #fff 100%);
     border-bottom-color: var(--apl-filter-border);
 }
 
-.fi-admin-shell .fi-resource-products .fi-admin-list-header__icon {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-admin-list-header__icon {
     background: #ede9fe;
 }
 
-.fi-admin-shell .fi-resource-products.fi-resource-list-records-page .fi-ta-ctn {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments).fi-resource-list-records-page .fi-ta-ctn {
     margin-block: 0 20px;
     margin-inline: 0;
     border: 1px solid var(--apl-border) !important;
@@ -28,65 +28,92 @@
     overflow: hidden;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-header-toolbar {
-    padding: 1rem 1.25rem !important;
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-header-toolbar {
+    padding: 0.65rem 1.25rem !important;
     background: linear-gradient(180deg, var(--apl-bg-soft) 0%, #fff 100%) !important;
     border-bottom: 1px solid var(--apl-border) !important;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-search-field input {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-search-field input {
     border: 1px solid var(--apl-border) !important;
     background: #fff !important;
     font-size: 0.8125rem;
     font-weight: 600;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-search-field input:focus {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-search-field input:focus {
     border-color: var(--apl-primary) !important;
     box-shadow: 0 0 0 3px rgba(114, 57, 234, 0.12) !important;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-filters-indicator,
-.fi-admin-shell .fi-resource-products .fi-ta-header-toolbar .fi-btn.fi-color-gray {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-filters-indicator,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-header-toolbar .fi-btn.fi-color-gray {
     border-radius: 8px;
     font-weight: 600;
     font-size: 0.8125rem;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-header-cell {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-header-cell {
     background: #fff !important;
     color: var(--apl-muted) !important;
     font-weight: 700 !important;
     font-size: 0.75rem !important;
-    padding: 0.75rem 0.85rem !important;
+    padding: 0.5rem 0.85rem !important;
     border-bottom: 2px solid var(--apl-border) !important;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-cell,
-.fi-admin-shell .fi-resource-products .fi-ta-actions-cell {
-    padding: 0.45rem 0.85rem !important;
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-actions-cell {
+    padding: 0.4rem 0.85rem !important;
     font-size: 0.8125rem;
+    line-height: 1.35;
     border-bottom: 1px solid #f1f1f4;
 }
 
-/* wrapperهای داخلی Filament (px-3 py-4) — ردیف باریک‌تر */
-.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-image,
-.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-icon,
-.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-text,
-.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-col-wrp {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell .fi-ta-image,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell .fi-ta-icon,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell .fi-ta-text,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell .fi-ta-col-wrp {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-row:hover .fi-ta-cell,
-.fi-admin-shell .fi-resource-products .fi-ta-row:hover .fi-ta-actions-cell {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-row:hover .fi-ta-cell,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-row:hover .fi-ta-actions-cell {
     background: #fafafa !important;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-row:last-child .fi-ta-cell,
-.fi-admin-shell .fi-resource-products .fi-ta-row:last-child .fi-ta-actions-cell {
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-row:last-child .fi-ta-cell,
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-row:last-child .fi-ta-actions-cell {
     border-bottom: none;
 }
+
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell .fi-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 6px;
+}
+
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-cell .fi-badge.fi-color-gray {
+    background: var(--apl-bg-soft);
+    color: #5e6278;
+    --tw-ring-color: transparent;
+}
+
+.fi-admin-shell .fi-resource-payments .fi-ta-actions-cell .fi-btn {
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.75rem !important;
+    min-height: 2rem !important;
+}
+
+.fi-admin-shell :is(.fi-resource-products, .fi-resource-payments) .fi-ta-pagination {
+    padding: 0.75rem 1.25rem !important;
+    background: var(--apl-bg-soft) !important;
+    border-top: 1px solid var(--apl-border) !important;
+}
+
+/* ——— فقط محصولات ——— */
 
 .fi-admin-shell .fi-resource-products img.fi-admin-table-thumb {
     border-radius: 8px;
@@ -125,27 +152,9 @@
     color: #5e6278;
 }
 
-.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-badge {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.2rem 0.5rem;
-    border-radius: 6px;
-}
-
-.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-badge.fi-color-gray {
-    background: var(--apl-bg-soft);
-    color: #5e6278;
-    --tw-ring-color: transparent;
-}
-
-.fi-admin-shell .fi-resource-products .fi-ta-pagination {
-    padding: 1rem 1.25rem !important;
-    background: var(--apl-bg-soft) !important;
-    border-top: 1px solid var(--apl-border) !important;
-}
-
 @media (max-width: 991px) {
-    .fi-admin-shell .fi-resource-products.fi-resource-list-records-page .fi-ta-ctn {
-        margin: 0 14px 16px;
+    .fi-admin-shell :is(.fi-resource-products, .fi-resource-payments).fi-resource-list-records-page .fi-ta-ctn {
+        margin-block: 0 16px;
+        margin-inline: 0;
     }
 }

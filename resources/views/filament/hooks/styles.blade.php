@@ -19,6 +19,9 @@
 <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/11/sweetalert2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('adminpanel/filament-overrides.css') }}?v={{ $adminAssetV }}">
 <link rel="stylesheet" href="{{ asset('css/filament-admin-order.css') }}">
-@if (request()->routeIs('filament.admin.resources.products.index'))
+@if (request()->routeIs([
+    'filament.admin.resources.products.index',
+    'filament.admin.resources.payments.index',
+]))
     <link rel="stylesheet" href="{{ asset('css/admin-product-list.css') }}?v={{ @filemtime(public_path('css/admin-product-list.css')) ?: 0 }}">
 @endif

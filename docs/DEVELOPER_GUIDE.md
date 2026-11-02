@@ -1290,7 +1290,7 @@ resources/views/layouts/shop.blade.php
 
 | تاریخ | توضیح |
 |-------|--------|
-| 2026-11-02 | محصولات ادمین: نمایش محصول، ستون‌ها، تیک چک‌باکس، padding سلول‌ها؛ **چیدمان پنل:** محتوا (`content-area`، نوار بالا، هدر/جدول لیست) بدون فاصلهٔ سفید کنار سایدبار (`padding-inline-start: 0`، `filament-overrides.css`) |
+| 2026-11-02 | لیست فشرده ادمین: `/admin/products` و `/admin/payments` — `admin-product-list.css` (بدون فاصله کنار سایدبار، سطرهای باریک‌تر)؛ چیدمان کلی در `filament-overrides.css` |
 | 2026-11-01 | **COD و نام درگاه:** `/admin/cod` (فعال/غیرفعال، عنوان، توضیح، آیکون)؛ هر درگاه → بخش «نمایش در تسویه حساب» (`display_label` / `display_description`)؛ `PaymentGatewayCatalog` + checkout + فیلتر سفارش/کوپن |
 | 2026-08-23 | نسخه اول — راهنمای جامع offline |
 | 2026-08-23 | نسخه 1.1 — تکمیل درگاه‌ها، variant، coupon، settings، SEO، tests |
