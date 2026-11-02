@@ -62,9 +62,18 @@
 
 .fi-admin-shell .fi-resource-products .fi-ta-cell,
 .fi-admin-shell .fi-resource-products .fi-ta-actions-cell {
-    padding: 0.65rem 0.85rem !important;
+    padding: 0.45rem 0.85rem !important;
     font-size: 0.8125rem;
     border-bottom: 1px solid #f1f1f4;
+}
+
+/* wrapperهای داخلی Filament (px-3 py-4) — ردیف باریک‌تر */
+.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-image,
+.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-icon,
+.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-text,
+.fi-admin-shell .fi-resource-products .fi-ta-cell .fi-ta-col-wrp {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 .fi-admin-shell .fi-resource-products .fi-ta-row:hover .fi-ta-cell,
