@@ -56,7 +56,7 @@
             <a :href="utilityLink.url"
                target="_blank"
                rel="noopener"
-               class="fi-admin-global-btn fi-admin-global-btn-store fi-admin-global-btn-store--outline">
+               class="admin-top-bar__create-btn">
                 <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                 <span x-text="utilityLink.label || 'مشاهده'"></span>
             </a>
