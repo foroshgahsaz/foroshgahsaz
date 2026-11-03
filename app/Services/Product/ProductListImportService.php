@@ -19,17 +19,37 @@ final class ProductListImportService
         $updated = 0;
         $errors = [];
 
-        DB::transaction(function () use ($rows, $editorUserId, $updateExisting, &$created, &$updated, &$errors): void {
-            foreach ($rows as $index => $row) {
-                $line = $index + 2;
+        foreach ($rows as $index => $row) {
+            $result = $this->importRow($row, $index + 2, $editorUserId, $updateExisting);
 
+            if ($result['status'] === 'created') {
+                $created++;
+            } elseif ($result['status'] === 'updated') {
+                $updated++;
+            } elseif ($result['status'] === 'error' && isset($result['message'])) {
+                $errors[] = $result['message'];
+            }
+        }
+
+        return compact('created', 'updated', 'errors');
+    }
+
+    /**
+     * @param  array{sku: string, name: string, stock: int, price: int}  $row
+     * @return array{status: 'created'|'updated'|'skipped'|'error', name?: string, message?: string}
+     */
+    public function importRow(array $row, int $lineNumber, ?int $editorUserId, bool $updateExisting): array
+    {
+        try {
+            return DB::transaction(function () use ($row, $lineNumber, $editorUserId, $updateExisting): array {
                 $existing = Product::query()->where('sku', $row['sku'])->first();
 
                 if ($existing !== null) {
                     if (! $updateExisting) {
-                        $errors[] = "سطر {$line}: SKU «{$row['sku']}» از قبل وجود دارد.";
-
-                        continue;
+                        return [
+                            'status' => 'error',
+                            'message' => "سطر {$lineNumber}: SKU «{$row['sku']}» از قبل وجود دارد.",
+                        ];
                     }
 
                     $existing->update([
@@ -38,9 +58,8 @@ final class ProductListImportService
                         'stock' => $row['stock'],
                         'last_edited_by_user_id' => $editorUserId,
                     ]);
-                    $updated++;
 
-                    continue;
+                    return ['status' => 'updated', 'name' => $row['name']];
                 }
 
                 $slug = $this->uniqueSlug(SlugFromTitle::fromProductName($row['name']), $row['sku']);
@@ -56,11 +75,17 @@ final class ProductListImportService
                     'is_featured' => false,
                     'last_edited_by_user_id' => $editorUserId,
                 ]);
-                $created++;
-            }
-        });
 
-        return compact('created', 'updated', 'errors');
+                return ['status' => 'created', 'name' => $row['name']];
+            });
+        } catch (\Throwable $e) {
+            report($e);
+
+            return [
+                'status' => 'error',
+                'message' => "سطر {$lineNumber}: «{$row['name']}» — خطا در ذخیره.",
+            ];
+        }
     }
 
     private function uniqueSlug(string $baseSlug, string $sku): string
