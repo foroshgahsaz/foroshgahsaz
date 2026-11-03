@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Category;
 use App\Services\Product\ProductExcelImportParser;
 use App\Services\Product\ProductListImportService;
 use App\Support\AdminAccess;
@@ -29,8 +28,6 @@ class ProductListImport extends Page
 
     protected static string $view = 'filament.pages.product-list-import';
 
-    public ?int $importCategoryId = null;
-
     public $importFile = null;
 
     public bool $updateExistingBySku = true;
@@ -40,24 +37,13 @@ class ProductListImport extends Page
         return AdminAccess::canManageProductsInAdmin();
     }
 
-    /** @return array<int, string> */
-    public function getCategoryOptionsProperty(): array
-    {
-        return Category::query()
-            ->orderBy('name')
-            ->pluck('name', 'id')
-            ->all();
-    }
-
     public function runImport(
         ProductExcelImportParser $parser,
         ProductListImportService $importer,
     ): void {
         $this->validate([
-            'importCategoryId' => ['required', 'integer', 'exists:categories,id'],
             'importFile' => ['required', 'file', 'mimes:xlsx,xls,csv,txt', 'max:10240'],
         ], [], [
-            'importCategoryId' => 'دسته‌بندی',
             'importFile' => 'فایل اکسل',
         ]);
 
@@ -96,7 +82,6 @@ class ProductListImport extends Page
 
         $result = $importer->importRows(
             $rows,
-            (int) $this->importCategoryId,
             auth()->id(),
             $this->updateExistingBySku,
         );

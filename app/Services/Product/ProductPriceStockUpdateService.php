@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class ProductPriceStockUpdateService
 {
-    public function updateRow(Product $product, int $price, int $stock, ?int $editorUserId): Product
+    public function updateRow(Product $product, int $price, int $stock, int $categoryId, ?int $editorUserId): Product
     {
         $product->update([
+            'category_id' => $categoryId,
             'price' => max(0, $price),
             'stock' => max(0, $stock),
             'last_edited_by_user_id' => $editorUserId,

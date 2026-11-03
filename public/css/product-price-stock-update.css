@@ -127,6 +127,14 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
+.product-price-stock-update .ppu-select--cell {
+    min-width: 7.5rem;
+    max-width: 10.5rem;
+    padding: 0.35rem 0.45rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
 .product-price-stock-update .ppu-select {
     cursor: pointer;
     appearance: none;
@@ -465,13 +473,14 @@
 }
 
 .product-price-stock-update .ppu-active-btn--off {
-    background: #fee2e2;
-    border-color: #fecaca;
-    color: #991b1b;
+    background: #ef4444;
+    border-color: #dc2626;
+    color: #fff;
 }
 
 .product-price-stock-update .ppu-active-btn--off:hover:not(:disabled) {
-    background: #fecaca;
+    background: #dc2626;
+    border-color: #b91c1c;
 }
 
 .product-price-stock-update .ppu-active-btn:disabled {

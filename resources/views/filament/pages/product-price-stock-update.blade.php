@@ -16,6 +16,7 @@
                         <label class="ppu-label" for="ppu-filter-category">دسته‌بندی</label>
                         <select id="ppu-filter-category" wire:model.live="filterCategoryId" class="ppu-select">
                             <option value="">همه دسته‌ها</option>
+                            <option value="0">بدون دسته</option>
                             @foreach($this->categoryOptions as $id => $name)
                                 <option value="{{ $id }}">{{ $name }}</option>
                             @endforeach
@@ -114,7 +115,7 @@
             <header class="ppu-table-head">
                 <div>
                     <h2 id="ppu-table-title" class="ppu-card__title">لیست محصولات</h2>
-                    <p class="ppu-card__subtitle">ویرایش سطری — پس از تغییر، «ذخیره» همان ردیف را بزنید</p>
+                    <p class="ppu-card__subtitle">ویرایش سطری دسته، قیمت و موجودی — پس از تغییر «ذخیره» همان ردیف را بزنید</p>
                 </div>
                 <span class="ppu-count-badge">{{ number_format($this->products->total()) }} محصول</span>
             </header>
@@ -143,7 +144,16 @@
                                     <span class="ppu-product-name" title="{{ $product->name }}">{{ $product->name }}</span>
                                 </td>
                                 <td class="ppu-col-cat">
-                                    <span class="ppu-cat-badge">{{ $product->category?->name ?? '—' }}</span>
+                                    <select
+                                        class="ppu-select ppu-select--cell"
+                                        wire:model="rowCategories.{{ $product->id }}"
+                                        aria-label="دسته محصول {{ $product->id }}"
+                                    >
+                                        <option value="">انتخاب دسته…</option>
+                                        @foreach($this->categoryOptions as $id => $name)
+                                            <option value="{{ $id }}">{{ $name }}</option>
+                                        @endforeach
+                                    </select>
                                 </td>
                                 <td class="ppu-col-price">
                                     <input
