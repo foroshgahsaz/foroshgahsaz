@@ -7,12 +7,15 @@ use App\Services\Product\ProductListImportService;
 use App\Support\AdminAccess;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 class ProductListImport extends Page
 {
     use WithFileUploads;
+
+    private const SUCCESS_LOG_LIMIT = 200;
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
 
@@ -32,15 +35,41 @@ class ProductListImport extends Page
 
     public bool $updateExistingBySku = true;
 
+    public bool $importRunning = false;
+
+    public bool $importFinished = false;
+
+    public int $importTotal = 0;
+
+    public int $importProgress = 0;
+
+    public string $importCurrentName = '';
+
+    public int $importCreated = 0;
+
+    public int $importUpdated = 0;
+
+    /** @var list<string> */
+    public array $importFailures = [];
+
+    /** @var list<array{name: string, action: string}> */
+    public array $importSuccesses = [];
+
+    public int $importSuccessOverflow = 0;
+
     public static function canAccess(): bool
     {
         return AdminAccess::canManageProductsInAdmin();
     }
 
-    public function runImport(
-        ProductExcelImportParser $parser,
-        ProductListImportService $importer,
-    ): void {
+    public function beginImport(ProductExcelImportParser $parser): void
+    {
+        if ($this->importRunning) {
+            return;
+        }
+
+        $this->resetImportUi();
+
         $this->validate([
             'importFile' => ['required', 'file', 'mimes:xlsx,xls,csv,txt', 'max:10240'],
         ], [], [
@@ -80,32 +109,128 @@ class ProductListImport extends Page
             return;
         }
 
-        $result = $importer->importRows(
-            $rows,
-            auth()->id(),
-            $this->updateExistingBySku,
-        );
+        $this->importFailures = $parseErrors;
+        $this->importTotal = count($rows);
+        $this->importRunning = true;
 
-        $allErrors = array_merge($parseErrors, $result['errors']);
-        $body = sprintf(
-            '%d محصول جدید، %d به‌روزرسانی.',
-            $result['created'],
-            $result['updated'],
-        );
+        Cache::put($this->importCacheKey(), [
+            'rows' => $rows,
+            'index' => 0,
+            'update_existing' => $this->updateExistingBySku,
+        ], now()->addHour());
 
-        if ($allErrors !== []) {
-            $body .= "\n".implode("\n", array_slice($allErrors, 0, 8));
-            if (count($allErrors) > 8) {
-                $body .= "\n…";
-            }
+        $this->importCurrentName = $rows[0]['name'] ?? '';
+
+        $this->processImportTick(app(ProductListImportService::class));
+    }
+
+    public function processImportTick(ProductListImportService $importer): void
+    {
+        if (! $this->importRunning) {
+            return;
         }
 
-        Notification::make()
-            ->title('ایمپورت انجام شد')
-            ->body($body)
-            ->success()
-            ->send();
+        $state = Cache::get($this->importCacheKey());
 
+        if (! is_array($state) || ! isset($state['rows'], $state['index'])) {
+            $this->abortImport('نشست import منقضی شد. دوباره فایل را انتخاب کنید.');
+
+            return;
+        }
+
+        /** @var list<array{sku: string, name: string, stock: int, price: int}> $rows */
+        $rows = $state['rows'];
+        $index = (int) $state['index'];
+        $updateExisting = (bool) ($state['update_existing'] ?? true);
+
+        if ($index >= count($rows)) {
+            $this->finishImport();
+
+            return;
+        }
+
+        $row = $rows[$index];
+        $this->importCurrentName = $row['name'];
+        $line = $index + 2;
+
+        $result = $importer->importRow($row, $line, auth()->id(), $updateExisting);
+
+        if ($result['status'] === 'created') {
+            $this->importCreated++;
+            $this->pushSuccess($row['name'], 'جدید');
+        } elseif ($result['status'] === 'updated') {
+            $this->importUpdated++;
+            $this->pushSuccess($row['name'], 'به‌روزرسانی');
+        } elseif ($result['status'] === 'error' && isset($result['message'])) {
+            $this->importFailures[] = $result['message'];
+        }
+
+        $index++;
+        $state['index'] = $index;
+        Cache::put($this->importCacheKey(), $state, now()->addHour());
+
+        $this->importProgress = $index;
+
+        if ($index >= count($rows)) {
+            $this->finishImport();
+
+            return;
+        }
+
+        $this->importCurrentName = $rows[$index]['name'];
+    }
+
+    protected function pushSuccess(string $name, string $action): void
+    {
+        if (count($this->importSuccesses) < self::SUCCESS_LOG_LIMIT) {
+            $this->importSuccesses[] = ['name' => $name, 'action' => $action];
+
+            return;
+        }
+
+        $this->importSuccessOverflow++;
+    }
+
+    protected function finishImport(): void
+    {
+        $this->importRunning = false;
+        $this->importFinished = true;
+        $this->importCurrentName = '';
+        Cache::forget($this->importCacheKey());
         $this->reset('importFile');
+    }
+
+    protected function abortImport(string $message): void
+    {
+        $this->importRunning = false;
+        Cache::forget($this->importCacheKey());
+        Notification::make()->title($message)->danger()->send();
+    }
+
+    protected function resetImportUi(): void
+    {
+        $this->importFinished = false;
+        $this->importTotal = 0;
+        $this->importProgress = 0;
+        $this->importCurrentName = '';
+        $this->importCreated = 0;
+        $this->importUpdated = 0;
+        $this->importFailures = [];
+        $this->importSuccesses = [];
+        $this->importSuccessOverflow = 0;
+    }
+
+    protected function importCacheKey(): string
+    {
+        return 'product-list-import:'.auth()->id();
+    }
+
+    public function getImportPercentProperty(): int
+    {
+        if ($this->importTotal <= 0) {
+            return 0;
+        }
+
+        return (int) min(100, round(($this->importProgress / $this->importTotal) * 100));
     }
 }
