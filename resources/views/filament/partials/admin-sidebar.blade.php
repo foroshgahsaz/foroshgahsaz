@@ -35,6 +35,7 @@
     use App\Filament\Resources\PostResource;
     use App\Filament\Resources\ProductFamilyResource;
     use App\Filament\Resources\ProductPlantResource;
+    use App\Filament\Pages\ProductListImport;
     use App\Filament\Pages\ProductPriceStockUpdate;
     use App\Filament\Resources\ProductResource;
     use App\Filament\Resources\ProductTemplateResource;
@@ -88,6 +89,8 @@
             'routes' => [
                 'filament.admin.resources.products.*',
                 'filament.admin.pages.product-price-stock-update',
+                'filament.admin.pages.product-list-import',
+                'filament.admin.product-import.template',
                 'filament.admin.resources.categories.*',
                 'filament.admin.resources.attributes.*',
                 'filament.admin.resources.product-families.*',
@@ -98,6 +101,7 @@
                 ['label' => 'محصولات', 'icon' => 'fa-box-open', 'items' => [
                     ['label' => 'لیست همه', 'url' => ProductResource::getUrl('index'), 'icon' => 'fa-list'],
                     ['label' => 'بروزرسانی قیمت', 'url' => ProductPriceStockUpdate::getUrl(), 'icon' => 'fa-tags'],
+                    ['label' => 'ورود لیست محصول', 'url' => ProductListImport::getUrl(), 'icon' => 'fa-file-excel'],
                     ['label' => 'افزودن محصول', 'url' => ProductResource::getUrl('create'), 'icon' => 'fa-plus'],
                     ['label' => 'دسته‌بندی‌ها', 'url' => CategoryResource::getUrl('index'), 'icon' => 'fa-tags'],
                     ['label' => 'ویژگی‌ها', 'url' => AttributeResource::getUrl('index'), 'icon' => 'fa-list-ul'],

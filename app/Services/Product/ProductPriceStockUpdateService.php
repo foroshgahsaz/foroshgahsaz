@@ -19,6 +19,16 @@ class ProductPriceStockUpdateService
         return $product->fresh();
     }
 
+    public function toggleActive(Product $product, ?int $editorUserId): Product
+    {
+        $product->update([
+            'is_active' => ! $product->is_active,
+            'last_edited_by_user_id' => $editorUserId,
+        ]);
+
+        return $product->fresh();
+    }
+
     public function bulkAdjustPriceOnQuery(Builder $query, float $pricePercent, ?int $editorUserId): int
     {
         if ($pricePercent === 0.0) {
