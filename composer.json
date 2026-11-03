@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.8",
         "morilog/jalali": "^3.4",
-        "mpdf/mpdf": "^8.2"
+        "mpdf/mpdf": "^8.2",
+        "symfony/yaml": "^7.4.18"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

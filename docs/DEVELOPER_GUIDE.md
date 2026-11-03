@@ -1290,7 +1290,7 @@ resources/views/layouts/shop.blade.php
 
 | تاریخ | توضیح |
 |-------|--------|
-| 2026-11-03 | گالری محصول ادمین: **بارگذاری چند تصویر** (`ProductGalleryService` + «بارگذاری چند تصویر» در RelationManager)؛ ذره‌بین فروشگاه: زوم لنز ~۲.۷۵× (`product.js`) |
+| 2026-11-03 | **وابستگی‌های امنیتی:** `symfony/yaml` ≥7.4.18 (GHSA-2v3c-qxhr-7vpv)، `vite` ≥6.4.5 (GHSA-8g5g-mxqh-grgj)، `follow-redirects` 1.16.2 (GHSA-mrwp-f3q8-3g9p) |
 | 2026-11-02 | لیست فشرده ادمین: `/admin/products` و `/admin/payments` — `admin-product-list.css` (بدون فاصله کنار سایدبار، سطرهای باریک‌تر)؛ چیدمان کلی در `filament-overrides.css` |
 | 2026-11-01 | **COD و نام درگاه:** `/admin/cod` (فعال/غیرفعال، عنوان، توضیح، آیکون)؛ هر درگاه → بخش «نمایش در تسویه حساب» (`display_label` / `display_description`)؛ `PaymentGatewayCatalog` + checkout + فیلتر سفارش/کوپن |
 | 2026-08-23 | نسخه اول — راهنمای جامع offline |
