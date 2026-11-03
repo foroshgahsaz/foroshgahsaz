@@ -22,7 +22,7 @@
                             <option value="{{ $id }}">{{ $name }}</option>
                         @endforeach
                     </select>
-                    <p class="ppu-bulk-field-hint">برای ردیف‌های جدید الزامی است. ردیف با SKU تکراری فقط قیمت/موجودی/نام به‌روز می‌شود.</p>
+                    <p class="ppu-bulk-field-hint">برای ردیف‌های جدید الزامی است. محصول جدید <strong>غیرفعال</strong> ایجاد می‌شود — فعال‌سازی از «بروزرسانی قیمت». ردیف با SKU تکراری فقط قیمت/موجودی/نام به‌روز می‌شود (وضعیت فعال تغییر نمی‌کند).</p>
                 </div>
                 <div class="ppu-field">
                     <label class="ppu-label">
