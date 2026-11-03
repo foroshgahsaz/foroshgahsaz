@@ -397,7 +397,7 @@ function initProductZoom() {
     return;
   }
 
-  const zoomLevel = 4.4;
+  const zoomLevel = 2.75;
 
   const zoomSrc = () => mainImage.dataset.zoom || mainImage.src;
 

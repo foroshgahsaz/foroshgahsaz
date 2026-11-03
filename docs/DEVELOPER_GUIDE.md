@@ -1290,6 +1290,7 @@ resources/views/layouts/shop.blade.php
 
 | تاریخ | توضیح |
 |-------|--------|
+| 2026-11-03 | گالری محصول ادمین: **بارگذاری چند تصویر** (`ProductGalleryService` + «بارگذاری چند تصویر» در RelationManager)؛ ذره‌بین فروشگاه: زوم لنز ~۲.۷۵× (`product.js`) |
 | 2026-11-02 | لیست فشرده ادمین: `/admin/products` و `/admin/payments` — `admin-product-list.css` (بدون فاصله کنار سایدبار، سطرهای باریک‌تر)؛ چیدمان کلی در `filament-overrides.css` |
 | 2026-11-01 | **COD و نام درگاه:** `/admin/cod` (فعال/غیرفعال، عنوان، توضیح، آیکون)؛ هر درگاه → بخش «نمایش در تسویه حساب» (`display_label` / `display_description`)؛ `PaymentGatewayCatalog` + checkout + فیلتر سفارش/کوپن |
 | 2026-08-23 | نسخه اول — راهنمای جامع offline |
@@ -1325,7 +1326,7 @@ resources/views/layouts/shop.blade.php
 | 2026-10-17 | دیجی‌پی `purchases/deliver`: فیلد `products` = عناوین فارسی `order_items.product_name` (×تعداد) |
 | 2026-10-17 | `/admin/orders/{id}` و جزئیات پرداخت: **لغو دیجی‌پی** — عودت API (`refunds?type=`) via `DigiPayRefundService` |
 | 2026-10-20 | فوتر و صفحات استاتیک: حذف متن دمو؛ migration footer (cache key)؛ حذف chapino از تماس/درباره؛ seeders بدون overwrite؛ `<title>` از `meta_title`/`title` همان صفحه در ادمین |
-| 2026-10-18 | صفحه محصول: **ذره‌بین روی تصویر** (لنز سبز + پیش‌نمایش ۴.۴× داخل لنز، بدون پنل کنار)؛ لایت‌باکس: دکمه بزرگنمایی + pan — `product.js` |
+| 2026-10-18 | صفحه محصول: **ذره‌بین روی تصویر** (لنز سبز، پیش‌نمایش ~۲.۷۵× داخل لنز)؛ لایت‌باکس: دکمه بزرگنمایی + pan — `product.js` |
 | 2026-10-18 | `RichContentEditor`: دکمه **بارگذاری و درج ویدئو**؛ فروشگاه: `RichContentPresenter` — ویدئوها **بالای** متن در `x-shop.rich-content` |
 | 2026-10-18 | صفحه اصلی — لینک‌های خانواده: repeater **نام/URL** در ویرایش خانواده (`product_family_homepage_popup_items`); migration `2026_10_18_100000_add_homepage_popup_to_product_families`; `shop:diagnose-family-homepage-popups` |
 | 2026-10-21 | پیش‌فاکتور نماینده: قیمت ردیف بدون مالیات، ردیف ارزش افزوده، **جمع کل** (بدون ردیف جمع اقلام بدون مالیات) — `document.blade.php` |

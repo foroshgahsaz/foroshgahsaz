@@ -3,8 +3,8 @@
 namespace App\Filament\Forms\Components;
 
 use App\Models\MediaFile;
-use App\Services\Media\ImageOptimizer;
 use App\Services\Media\MediaRegistry;
+use App\Services\Media\UploadedPublicImageStorage;
 use App\Support\MediaPath;
 use Closure;
 use Filament\Forms\Components\Actions\Action;
@@ -19,7 +19,6 @@ use Filament\Forms\Components\ViewField;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
@@ -268,28 +267,9 @@ class MediaPicker extends Field
 
     protected function persistUploadedTempFile(TemporaryUploadedFile $file): string
     {
-        $disk = 'public';
         $directory = $this->getDirectory() !== '' ? $this->getDirectory() : 'uploads';
-        $extension = strtolower((string) ($file->getClientOriginalExtension() ?: $file->extension() ?: 'bin'));
-        $extension = preg_replace('/[^a-z0-9]+/', '', $extension) ?: 'bin';
-        $filename = Str::ulid().'.'.$extension;
 
-        if (! $file->isValid()) {
-            throw ValidationException::withMessages([
-                'upload_file' => 'فایل موقت آپلود منقضی شده. دوباره انتخاب کنید و تا پایان آپلود صبر کنید.',
-            ]);
-        }
-
-        $path = $file->storeAs($directory, $filename, ['disk' => $disk]);
-        $path = app(ImageOptimizer::class)->optimize($disk, $path, $directory);
-
-        app(MediaRegistry::class)->registerFromPath(
-            $disk,
-            $path,
-            $file->getClientOriginalName(),
-        );
-
-        return $path;
+        return app(UploadedPublicImageStorage::class)->store($file, $directory);
     }
 
     public function getCurrentPath(): ?string
