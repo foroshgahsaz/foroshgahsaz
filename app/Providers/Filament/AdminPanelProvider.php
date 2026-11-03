@@ -18,6 +18,7 @@ use App\Filament\Pages\ViewSiteErrorLogs;
 use App\Http\Controllers\Admin\DownloadApplicationLogFileController;
 use App\Http\Controllers\Admin\DownloadDatabaseBackupController;
 use App\Http\Controllers\Admin\DownloadPaymentLogFileController;
+use App\Http\Controllers\Admin\ProductImportTemplateController;
 use App\Http\Middleware\RestrictSalesManagerAdminAccess;
 use App\Http\Middleware\SetPersianLocale;
 use App\Services\Settings\SettingsService;
@@ -109,6 +110,8 @@ class AdminPanelProvider extends PanelProvider
                     ->name('site-logs.download');
                 Route::get('/database-backups/download', DownloadDatabaseBackupController::class)
                     ->name('database-backups.download');
+                Route::get('/product-import/template', ProductImportTemplateController::class)
+                    ->name('product-import.template');
             });
     }
 }

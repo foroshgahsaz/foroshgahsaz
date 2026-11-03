@@ -111,6 +111,19 @@ class ProductPriceStockUpdate extends Page
             ->send();
     }
 
+    public function toggleProductActive(int $productId, ProductPriceStockUpdateService $service): void
+    {
+        $product = Product::query()->whereKey($productId)->firstOrFail();
+
+        $updated = $service->toggleActive($product, auth()->id());
+
+        Notification::make()
+            ->title($updated->is_active ? 'محصول فعال شد' : 'محصول غیرفعال شد')
+            ->body('«'.$updated->name.'»')
+            ->success()
+            ->send();
+    }
+
     public function applyBulkPricePercent(ProductPriceStockUpdateService $service): void
     {
         if (trim($this->bulkPricePercent) === '') {

@@ -434,3 +434,47 @@
     text-align: center;
     width: 5.5rem;
 }
+
+.product-price-stock-update .ppu-col-active {
+    text-align: center;
+    width: 6.5rem;
+}
+
+.product-price-stock-update .ppu-active-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.product-price-stock-update .ppu-active-btn--on {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+}
+
+.product-price-stock-update .ppu-active-btn--on:hover:not(:disabled) {
+    background: #bbf7d0;
+}
+
+.product-price-stock-update .ppu-active-btn--off {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.product-price-stock-update .ppu-active-btn--off:hover:not(:disabled) {
+    background: #fecaca;
+}
+
+.product-price-stock-update .ppu-active-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}

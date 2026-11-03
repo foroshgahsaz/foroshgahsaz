@@ -130,6 +130,7 @@
                             <th class="ppu-col-cat">دسته</th>
                             <th class="ppu-col-price">قیمت (تومان)</th>
                             <th class="ppu-col-stock">موجودی</th>
+                            <th class="ppu-col-active">وضعیت</th>
                             <th class="ppu-col-date">آخرین ویرایش</th>
                             <th class="ppu-col-action"></th>
                         </tr>
@@ -164,6 +165,22 @@
                                         aria-label="موجودی محصول {{ $product->id }}"
                                     >
                                 </td>
+                                <td class="ppu-col-active">
+                                    <button
+                                        type="button"
+                                        class="ppu-active-btn {{ $product->is_active ? 'ppu-active-btn--on' : 'ppu-active-btn--off' }}"
+                                        wire:click="toggleProductActive({{ $product->id }})"
+                                        wire:loading.attr="disabled"
+                                        wire:target="toggleProductActive({{ $product->id }})"
+                                        aria-pressed="{{ $product->is_active ? 'true' : 'false' }}"
+                                        title="{{ $product->is_active ? 'غیرفعال کردن' : 'فعال کردن' }}"
+                                    >
+                                        <span wire:loading.remove wire:target="toggleProductActive({{ $product->id }})">
+                                            {{ $product->is_active ? 'فعال' : 'غیرفعال' }}
+                                        </span>
+                                        <span wire:loading wire:target="toggleProductActive({{ $product->id }})">…</span>
+                                    </button>
+                                </td>
                                 <td class="ppu-col-date">
                                     <time class="ppu-date">{{ $product->updated_at?->shopJalali('Y/m/d H:i') ?? '—' }}</time>
                                     @if($product->lastEditedBy)
@@ -185,7 +202,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="ppu-empty">محصولی با این فیلتر یافت نشد.</td>
+                                <td colspan="8" class="ppu-empty">محصولی با این فیلتر یافت نشد.</td>
                             </tr>
                         @endforelse
                     </tbody>
