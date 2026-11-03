@@ -52,7 +52,7 @@ final class ProductListImportService
                     'sku' => $row['sku'],
                     'price' => $row['price'],
                     'stock' => $row['stock'],
-                    'is_active' => true,
+                    'is_active' => false,
                     'is_featured' => false,
                     'last_edited_by_user_id' => $editorUserId,
                 ]);
