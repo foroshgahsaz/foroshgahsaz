@@ -13,23 +13,15 @@
                 </div>
             </header>
 
-            <div class="ppu-fields ppu-fields--2">
-                <div class="ppu-field">
-                    <label class="ppu-label" for="pli-category">دسته‌بندی محصولات جدید</label>
-                    <select id="pli-category" wire:model="importCategoryId" class="ppu-select" required>
-                        <option value="">انتخاب دسته…</option>
-                        @foreach($this->categoryOptions as $id => $name)
-                            <option value="{{ $id }}">{{ $name }}</option>
-                        @endforeach
-                    </select>
-                    <p class="ppu-bulk-field-hint">برای ردیف‌های جدید الزامی است. محصول جدید <strong>غیرفعال</strong> ایجاد می‌شود — فعال‌سازی از «بروزرسانی قیمت». ردیف با SKU تکراری فقط قیمت/موجودی/نام به‌روز می‌شود (وضعیت فعال تغییر نمی‌کند).</p>
-                </div>
-                <div class="ppu-field">
-                    <label class="ppu-label">
-                        <input type="checkbox" wire:model="updateExistingBySku" class="ppu-checkbox">
-                        به‌روزرسانی محصول موجود با همان SKU
-                    </label>
-                </div>
+            <div class="ppu-field">
+                <label class="ppu-label">
+                    <input type="checkbox" wire:model="updateExistingBySku" class="ppu-checkbox">
+                    به‌روزرسانی محصول موجود با همان SKU
+                </label>
+                <p class="ppu-bulk-field-hint">
+                    محصول جدید <strong>غیرفعال</strong> و <strong>بدون دسته</strong> ایجاد می‌شود — دسته و فعال‌سازی از «بروزرسانی قیمت».
+                    ردیف با SKU تکراری فقط قیمت/موجودی/نام به‌روز می‌شود.
+                </p>
             </div>
 
             <div class="ppu-field pli-upload">
@@ -42,9 +34,6 @@
                     class="ppu-file-input"
                 >
                 @error('importFile')
-                    <p class="pli-error">{{ $message }}</p>
-                @enderror
-                @error('importCategoryId')
                     <p class="pli-error">{{ $message }}</p>
                 @enderror
                 <div wire:loading wire:target="importFile" class="pli-loading">در حال بارگذاری فایل…</div>

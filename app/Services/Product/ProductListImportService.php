@@ -13,13 +13,13 @@ final class ProductListImportService
      * @param  list<array{sku: string, name: string, stock: int, price: int}>  $rows
      * @return array{created: int, updated: int, errors: list<string>}
      */
-    public function importRows(array $rows, int $categoryId, ?int $editorUserId, bool $updateExisting = true): array
+    public function importRows(array $rows, ?int $editorUserId, bool $updateExisting = true): array
     {
         $created = 0;
         $updated = 0;
         $errors = [];
 
-        DB::transaction(function () use ($rows, $categoryId, $editorUserId, $updateExisting, &$created, &$updated, &$errors): void {
+        DB::transaction(function () use ($rows, $editorUserId, $updateExisting, &$created, &$updated, &$errors): void {
             foreach ($rows as $index => $row) {
                 $line = $index + 2;
 
@@ -46,7 +46,7 @@ final class ProductListImportService
                 $slug = $this->uniqueSlug(SlugFromTitle::fromProductName($row['name']), $row['sku']);
 
                 Product::query()->create([
-                    'category_id' => $categoryId,
+                    'category_id' => null,
                     'name' => $row['name'],
                     'slug' => $slug,
                     'sku' => $row['sku'],

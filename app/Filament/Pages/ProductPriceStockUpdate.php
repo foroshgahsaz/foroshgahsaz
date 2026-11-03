@@ -43,6 +43,9 @@ class ProductPriceStockUpdate extends Page
     /** @var array<int, int|string> */
     public array $rowStocks = [];
 
+    /** @var array<int, int|string|null> */
+    public array $rowCategories = [];
+
     public string $bulkPricePercent = '';
 
     public string $bulkStockDelta = '';
@@ -90,9 +93,11 @@ class ProductPriceStockUpdate extends Page
         $this->validate([
             "rowPrices.{$productId}" => ['required', 'integer', 'min:0'],
             "rowStocks.{$productId}" => ['required', 'integer', 'min:0', 'max:999999'],
+            "rowCategories.{$productId}" => ['required', 'integer', 'exists:categories,id'],
         ], [], [
             "rowPrices.{$productId}" => 'قیمت',
             "rowStocks.{$productId}" => 'موجودی',
+            "rowCategories.{$productId}" => 'دسته‌بندی',
         ]);
 
         $product = Product::query()->whereKey($productId)->firstOrFail();
@@ -101,12 +106,13 @@ class ProductPriceStockUpdate extends Page
             $product,
             (int) $this->rowPrices[$productId],
             (int) $this->rowStocks[$productId],
+            (int) $this->rowCategories[$productId],
             auth()->id(),
         );
 
         Notification::make()
             ->title('ذخیره شد')
-            ->body('قیمت و موجودی «'.$product->name.'» به‌روزرسانی شد.')
+            ->body('دسته، قیمت و موجودی «'.$product->name.'» به‌روزرسانی شد.')
             ->success()
             ->send();
     }
@@ -216,7 +222,9 @@ class ProductPriceStockUpdate extends Page
             ->with(['category:id,name', 'lastEditedBy:id,name'])
             ->orderByDesc('updated_at');
 
-        if ($this->filterCategoryId) {
+        if ($this->filterCategoryId === 0) {
+            $query->whereNull('category_id');
+        } elseif ($this->filterCategoryId) {
             $query->where('category_id', $this->filterCategoryId);
         }
 
@@ -233,6 +241,7 @@ class ProductPriceStockUpdate extends Page
     {
         $this->rowPrices = [];
         $this->rowStocks = [];
+        $this->rowCategories = [];
     }
 
     public function rendering(): void
@@ -243,6 +252,9 @@ class ProductPriceStockUpdate extends Page
             }
             if (! array_key_exists($product->id, $this->rowStocks)) {
                 $this->rowStocks[$product->id] = (int) $product->stock;
+            }
+            if (! array_key_exists($product->id, $this->rowCategories)) {
+                $this->rowCategories[$product->id] = $product->category_id;
             }
         }
     }
