@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Services\Payment\AmountConverter;
 use App\Services\Payment\PaymentGatewayCatalog;
+use App\Services\Settings\SettingsService;
 
 class ShopLabels
 {
@@ -114,6 +115,34 @@ class ShopLabels
         }
 
         return number_format($amount).' تومان';
+    }
+
+    public static function shopPricesHidden(): bool
+    {
+        return filter_var(
+            app(SettingsService::class)->get('site', 'hide_shop_prices', false),
+            FILTER_VALIDATE_BOOLEAN
+        );
+    }
+
+    /** قیمت فروشگاه (UI) — ریال؛ در صورت «عدم نمایش قیمت» خط تیره. */
+    public static function formatShopMoney(?int $shopAmountTomans): string
+    {
+        if (self::shopPricesHidden()) {
+            return '—';
+        }
+
+        return self::formatInvoiceMoney($shopAmountTomans);
+    }
+
+    /** @return int|null مبلغ ریال برای نمایش در UI فروشگاه */
+    public static function shopDisplayAmountInRial(?int $shopAmountTomans): ?int
+    {
+        if ($shopAmountTomans === null || self::shopPricesHidden()) {
+            return null;
+        }
+
+        return self::invoiceAmountInRial($shopAmountTomans);
     }
 
     /** مبلغ ذخیره‌شده در سیستم (تومان) → عدد ریال برای نمایش روی فاکتور. */

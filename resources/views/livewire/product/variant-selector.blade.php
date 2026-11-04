@@ -38,7 +38,7 @@
                                 wire:target="selectAttribute, selectVariant"
                                 wire:key="variant-chip-{{ $variant->id }}"
                                 class="product-storage-btn @if((int) $selectedVariantId === (int) $variant->id) is-active @endif">
-                            {{ $variant->name }} — {{ number_format($variant->effective_price) }} تومان
+                            {{ $variant->name }} — {{ shop_money($variant->effective_price) }}
                         </button>
                     @endforeach
                 </div>

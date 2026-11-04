@@ -466,7 +466,19 @@ function initProductOptions() {
       btn.classList.add('is-active');
       const price = btn.dataset.price;
       if (!price) return;
-      const priceHtml = `${price} <span>تومان</span>`;
+      const cfg = window.__shopPrice || {};
+      if (cfg.hidden) {
+        const priceHtml = '—';
+        const priceEl = document.getElementById('productPrice');
+        if (priceEl) priceEl.innerHTML = priceHtml;
+        const mobilePriceEl = document.getElementById('productMobilePrice');
+        if (mobilePriceEl) mobilePriceEl.innerHTML = priceHtml;
+        return;
+      }
+      const factor = typeof cfg.factor === 'number' ? cfg.factor : 10;
+      const rial = Number(String(price).replace(/,/g, '')) * factor;
+      const formatted = Number.isFinite(rial) ? rial.toLocaleString('en-US') : price;
+      const priceHtml = `${formatted} <span>${cfg.currency || 'ریال'}</span>`;
       const priceEl = document.getElementById('productPrice');
       if (priceEl) priceEl.innerHTML = priceHtml;
       const mobilePriceEl = document.getElementById('productMobilePrice');

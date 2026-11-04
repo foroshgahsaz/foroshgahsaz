@@ -91,12 +91,12 @@
             <div class="space-y-2 text-sm">
                 <div class="flex justify-between text-gray-600">
                     <span>جمع کالاها</span>
-                    <span>{{ number_format($summary['subtotal']) }} تومان</span>
+                    <span>{{ shop_money($summary['subtotal']) }}</span>
                 </div>
                 @if ($summary['discount'] > 0)
                     <div class="flex justify-between text-emerald-600">
                         <span>تخفیف</span>
-                        <span>− {{ number_format($summary['discount']) }} تومان</span>
+                        <span>− {{ shop_money($summary['discount']) }}</span>
                     </div>
                 @endif
                 <div class="flex justify-between text-gray-600">
@@ -110,13 +110,13 @@
                         @if ($summary['shipping'] === 0)
                             <span class="text-emerald-600 font-medium">رایگان</span>
                         @else
-                            {{ number_format($summary['shipping']) }} تومان
+                            {{ shop_money($summary['shipping']) }}
                         @endif
                     </span>
                 </div>
                 <div class="flex justify-between font-black text-base pt-2 border-t border-gray-200">
                     <span>مبلغ قابل پرداخت</span>
-                    <span class="text-brand-green">{{ number_format($summary['total']) }} تومان</span>
+                    <span class="text-brand-green">{{ shop_money($summary['total']) }}</span>
                 </div>
             </div>
             <a href="{{ route('checkout') }}"

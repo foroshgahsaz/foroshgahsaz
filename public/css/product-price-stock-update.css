@@ -102,6 +102,33 @@
     }
 }
 
+.product-price-stock-update .ppu-fields--3 {
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .product-price-stock-update .ppu-fields--3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.product-price-stock-update .ppu-card--site-sales {
+    margin-bottom: 1rem;
+    border-color: #fde68a;
+    background: linear-gradient(180deg, #fffbeb 0%, #fff 100%);
+}
+
+.product-price-stock-update .ppu-site-sales-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #181c32;
+    cursor: pointer;
+    padding: 0 0.25rem 0.25rem;
+}
+
 .product-price-stock-update .ppu-field {
     margin: 0;
 }
