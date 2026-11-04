@@ -29,3 +29,17 @@ if (! function_exists('shop_jalali')) {
         return ShopDate::format($date, $format, $empty);
     }
 }
+
+if (! function_exists('shop_money')) {
+    function shop_money(?int $amountTomans): string
+    {
+        return \App\Support\ShopLabels::formatShopMoney($amountTomans);
+    }
+}
+
+if (! function_exists('shop_prices_hidden')) {
+    function shop_prices_hidden(): bool
+    {
+        return \App\Support\ShopLabels::shopPricesHidden();
+    }
+}

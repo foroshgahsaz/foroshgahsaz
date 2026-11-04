@@ -5,10 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
+        use App\Support\ShopLabels;
+
         $siteSettings = app(\App\Services\Settings\SettingsService::class)->site();
         $needsSwiper = request()->routeIs('home', 'products.show');
         $needsListingAssets = request()->routeIs('products.*', 'categories.*', 'brands.*');
     @endphp
+    <script>
+        window.__shopPrice = {
+            hidden: @json(ShopLabels::shopPricesHidden()),
+            currency: 'ریال',
+            factor: 10,
+        };
+    </script>
     <title>@yield('title', site_name())</title>
     @hasSection('meta')
         @yield('meta')

@@ -141,7 +141,7 @@
                                             <p class="text-xs text-gray-400 mt-0.5">حدود {{ $method->estimated_days }} روز</p>
                                         @endif
                                     </div>
-                                    <span class="checkout-option__price">{{ $method->price === 0 ? 'رایگان' : number_format($method->price).' تومان' }}</span>
+                                    <span class="checkout-option__price">{{ $method->price === 0 ? 'رایگان' : shop_money($method->price) }}</span>
                                 </div>
                             </label>
                         @empty
@@ -234,22 +234,22 @@
                             <div class="checkout-summary__lines">
                                 <div class="checkout-summary__line">
                                     <span>جمع کالا</span>
-                                    <span>{{ number_format($preview['subtotal']) }} تومان</span>
+                                    <span>{{ shop_money($preview['subtotal']) }}</span>
                                 </div>
                                 @if ($preview['discount'] > 0)
                                     <div class="checkout-summary__line checkout-summary__line--discount">
                                         <span>تخفیف</span>
-                                        <span>− {{ number_format($preview['discount']) }} تومان</span>
+                                        <span>− {{ shop_money($preview['discount']) }}</span>
                                     </div>
                                 @endif
                                 <div class="checkout-summary__line">
                                     <span>ارسال</span>
-                                    <span>{{ $preview['shipping'] === 0 ? 'رایگان' : number_format($preview['shipping']).' تومان' }}</span>
+                                    <span>{{ $preview['shipping'] === 0 ? 'رایگان' : shop_money($preview['shipping']) }}</span>
                                 </div>
                             </div>
                             <div class="checkout-summary__total">
                                 <span class="font-bold text-navy">مبلغ نهایی</span>
-                                <span class="text-lg font-black text-brand-green">{{ number_format($preview['total']) }} تومان</span>
+                                <span class="text-lg font-black text-brand-green">{{ shop_money($preview['total']) }}</span>
                             </div>
                             <button type="submit" wire:loading.attr="disabled" class="shop-btn-gold checkout-summary__submit" @disabled(! ($checkoutUnlocked ?? false))>
                                 <span wire:loading.remove wire:target="placeOrder">ثبت و پرداخت سفارش</span>
@@ -264,7 +264,7 @@
                     <div class="shop-mobile-bar checkout-mobile-bar" aria-label="ثبت سفارش">
                         <div class="shop-mobile-bar__info">
                             <span class="shop-mobile-bar__label">مبلغ نهایی</span>
-                            <span class="shop-mobile-bar__price">{{ number_format($preview['total']) }} تومان</span>
+                            <span class="shop-mobile-bar__price">{{ shop_money($preview['total']) }}</span>
                         </div>
                         <button type="submit" form="checkoutForm" wire:loading.attr="disabled" class="shop-mobile-bar__btn">
                             <span wire:loading.remove wire:target="placeOrder">ثبت سفارش</span>

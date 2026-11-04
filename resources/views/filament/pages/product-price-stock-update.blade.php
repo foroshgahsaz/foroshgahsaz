@@ -1,5 +1,21 @@
 <x-filament-panels::page>
     <div class="admin-order product-price-stock-update" dir="rtl">
+        <section class="ppu-card ppu-card--site-sales" aria-labelledby="ppu-site-sales-title">
+            <header class="ppu-card__head">
+                <span class="ppu-card__icon ppu-card__icon--bulk" aria-hidden="true">
+                    <i class="fa-solid fa-store-slash"></i>
+                </span>
+                <div>
+                    <h2 id="ppu-site-sales-title" class="ppu-card__title">غیرفعال کردن فروش</h2>
+                    <p class="ppu-card__subtitle">با فعال بودن این گزینه، <strong>قیمت در کل سایت</strong> (لیست، صفحه محصول، سبد و تسویه) نمایش داده نمی‌شود.</p>
+                </div>
+            </header>
+            <label class="ppu-site-sales-toggle">
+                <input type="checkbox" wire:model.live="hideShopPrices" class="ppu-checkbox">
+                <span>عدم نمایش قیمت در سایت</span>
+            </label>
+        </section>
+
         <div class="ppu-toolbar">
             <section class="ppu-card ppu-card--filters" aria-labelledby="ppu-filters-title">
                 <header class="ppu-card__head">
@@ -11,13 +27,23 @@
                         <p class="ppu-card__subtitle">محدود کردن محصولات قبل از ویرایش یا اعمال گروهی</p>
                     </div>
                 </header>
-                <div class="ppu-fields ppu-fields--2">
+                <div class="ppu-fields ppu-fields--3">
                     <div class="ppu-field">
                         <label class="ppu-label" for="ppu-filter-category">دسته‌بندی</label>
                         <select id="ppu-filter-category" wire:model.live="filterCategoryId" class="ppu-select">
                             <option value="">همه دسته‌ها</option>
                             <option value="0">بدون دسته</option>
                             @foreach($this->categoryOptions as $id => $name)
+                                <option value="{{ $id }}">{{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="ppu-field">
+                        <label class="ppu-label" for="ppu-filter-brand">برند</label>
+                        <select id="ppu-filter-brand" wire:model.live="filterBrandId" class="ppu-select">
+                            <option value="">همه برندها</option>
+                            <option value="0">بدون برند</option>
+                            @foreach($this->brandOptions as $id => $name)
                                 <option value="{{ $id }}">{{ $name }}</option>
                             @endforeach
                         </select>

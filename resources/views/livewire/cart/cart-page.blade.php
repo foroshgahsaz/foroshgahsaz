@@ -62,7 +62,11 @@
 
                 <div class="cart-invoice__totals cart-invoice__totals--compact">
                     <a href="{{ route('checkout') }}" class="shop-btn-gold cart-invoice__checkout">
-                        ادامه و تسویه حساب ({{ number_format($summary['total']) }} تومان)
+                        @if(shop_prices_hidden())
+                            ادامه و تسویه حساب
+                        @else
+                            ادامه و تسویه حساب ({{ shop_money($summary['total']) }})
+                        @endif
                     </a>
                 </div>
             </div>
@@ -70,7 +74,7 @@
             <div class="shop-mobile-bar lg:hidden" aria-label="خلاصه سبد خرید">
                 <div class="shop-mobile-bar__info">
                     <span class="shop-mobile-bar__label">مبلغ قابل پرداخت</span>
-                    <span class="shop-mobile-bar__price">{{ number_format($summary['total']) }} تومان</span>
+                    <span class="shop-mobile-bar__price">{{ shop_money($summary['total']) }}</span>
                 </div>
                 <a href="{{ route('checkout') }}" class="shop-mobile-bar__btn">تسویه حساب</a>
             </div>

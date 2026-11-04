@@ -330,6 +330,7 @@ class SettingsService
                 'maintenance_message',
                 'سایت در حال بروزرسانی می‌باشد. لطفاً کمی بعد دوباره سر بزنید.'
             ),
+            'hide_shop_prices' => filter_var($this->get('site', 'hide_shop_prices', false), FILTER_VALIDATE_BOOLEAN),
         ];
     }
 

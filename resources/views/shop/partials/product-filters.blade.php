@@ -44,8 +44,8 @@
                     </div>
                 </div>
                 <div class="price-range-labels">
-                    <span class="price-range-min-label">{{ number_format($currentMin) }} تومان</span>
-                    <span class="price-range-max-label">{{ number_format($currentMax) }} تومان</span>
+                    <span class="price-range-min-label">{{ shop_money($currentMin) }}</span>
+                    <span class="price-range-max-label">{{ shop_money($currentMax) }}</span>
                 </div>
             </div>
             <input type="hidden" name="min_price" class="price-range-min-input" value="{{ request('min_price') }}">

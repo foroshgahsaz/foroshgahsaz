@@ -2,10 +2,13 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Product\ProductPriceStockUpdateService;
+use App\Services\Settings\SettingsService;
 use App\Support\AdminAccess;
+use App\Support\ShopLabels;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,8 +37,12 @@ class ProductPriceStockUpdate extends Page
 
     public ?int $filterCategoryId = null;
 
+    public ?int $filterBrandId = null;
+
     /** @var ''|'all'|'in_stock'|'out_of_stock' */
     public string $filterStock = 'all';
+
+    public bool $hideShopPrices = false;
 
     /** @var array<int, int|string> */
     public array $rowPrices = [];
@@ -58,9 +65,16 @@ class ProductPriceStockUpdate extends Page
     public function mount(): void
     {
         $this->resetPage();
+        $this->hideShopPrices = ShopLabels::shopPricesHidden();
     }
 
     public function updatedFilterCategoryId(): void
+    {
+        $this->resetPage();
+        $this->resetRowInputs();
+    }
+
+    public function updatedFilterBrandId(): void
     {
         $this->resetPage();
         $this->resetRowInputs();
@@ -70,6 +84,19 @@ class ProductPriceStockUpdate extends Page
     {
         $this->resetPage();
         $this->resetRowInputs();
+    }
+
+    public function updatedHideShopPrices(SettingsService $settings): void
+    {
+        $settings->set('site', 'hide_shop_prices', $this->hideShopPrices);
+
+        Notification::make()
+            ->title($this->hideShopPrices ? 'نمایش قیمت در سایت خاموش شد' : 'نمایش قیمت در سایت فعال شد')
+            ->body($this->hideShopPrices
+                ? 'قیمت‌ها در فروشگاه (کارت محصول، سبد، checkout و …) نمایش داده نمی‌شوند.'
+                : 'قیمت‌ها در فروشگاه به‌صورت ریال نمایش داده می‌شوند.')
+            ->success()
+            ->send();
     }
 
     /** @return LengthAwarePaginator<int, Product> */
@@ -83,6 +110,15 @@ class ProductPriceStockUpdate extends Page
     public function getCategoryOptionsProperty(): array
     {
         return Category::query()
+            ->orderBy('name')
+            ->pluck('name', 'id')
+            ->all();
+    }
+
+    /** @return array<int, string> */
+    public function getBrandOptionsProperty(): array
+    {
+        return Brand::query()
             ->orderBy('name')
             ->pluck('name', 'id')
             ->all();
@@ -219,13 +255,19 @@ class ProductPriceStockUpdate extends Page
     protected function filteredQuery(): Builder
     {
         $query = Product::query()
-            ->with(['category:id,name', 'lastEditedBy:id,name'])
+            ->with(['category:id,name', 'brand:id,name', 'lastEditedBy:id,name'])
             ->orderByDesc('updated_at');
 
         if ($this->filterCategoryId === 0) {
             $query->whereNull('category_id');
         } elseif ($this->filterCategoryId) {
             $query->where('category_id', $this->filterCategoryId);
+        }
+
+        if ($this->filterBrandId === 0) {
+            $query->whereNull('brand_id');
+        } elseif ($this->filterBrandId) {
+            $query->where('brand_id', $this->filterBrandId);
         }
 
         match ($this->filterStock) {
