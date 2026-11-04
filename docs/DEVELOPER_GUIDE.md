@@ -1334,6 +1334,7 @@ resources/views/layouts/shop.blade.php
 | 2026-10-17 | `/admin/orders`: فیلتر روش پرداخت بر اساس **درگاه‌های فعال** (باجت‌پی، دیجی‌پی، …) + `cod`؛ تطبیق `payment_method` و سفارش‌های `online` با `payments.gateway` |
 | 2026-10-17 | **فاکتور** (`components/sales-invoice/document`، PDF، رسید پرداخت): نمایش مبالغ **ریال** (`ShopLabels::formatInvoiceMoney`، تومان داخلی ×۱۰) |
 | 2026-10-17 | وضعیت سفارش **پردازش انبار** (`warehouse_processing`) بعد از «در حال پردازش»؛ migration `2026_10_17_120000_add_warehouse_processing_status_to_orders` (ENUM MySQL)؛ دکمه تأیید پرداخت؛ SMS `order_warehouse_processing` |
+| 2026-11-05 | `hide_shop_prices`: دکمه محصول **تماس بگیرید** (لینک `tel:` اگر تلفن سایت تنظیم باشد) — `AddToCart` |
 | 2026-11-05 | `/admin/product-price-stock-update` — فیلتر **برند** (تغییر گروهی قیمت)، گزینه **عدم نمایش قیمت در سایت** (`site.hide_shop_prices`) |
 | 2026-11-05 | فروشگاه: نمایش قیمت **ریال** (`ShopLabels::formatShopMoney`، `x-shop.price`، سبد/checkout)؛ DB همچنان تومان |
 | 2026-11-03 | `/admin/product-list-import` — progress bar، نام محصول در حال پردازش، خلاصه موفق/ناموفق (import تدریجی با `wire:poll`) |

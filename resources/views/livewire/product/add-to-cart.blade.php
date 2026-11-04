@@ -64,7 +64,7 @@
 
 
 
-    @if ($selectedStock !== null)
+    @if ($selectedStock !== null && ! ($shopPricesHidden ?? false))
 
         <p class="text-xs text-gray-500 mb-3">
 
@@ -82,38 +82,62 @@
 
 
 
+    @php
+        $purchaseBlocked = ($shopPricesHidden ?? false) || $selectedStock === 0;
+    @endphp
+
     <div class="flex items-center gap-3 flex-wrap">
 
-        <div class="product-qty">
+        @if (! ($shopPricesHidden ?? false))
+            <div class="product-qty">
 
-            <button type="button" wire:click="decrementQuantity" aria-label="کم کردن">−</button>
+                <button type="button" wire:click="decrementQuantity" aria-label="کم کردن">−</button>
 
-            <span class="product-qty__value" aria-live="polite">{{ $quantity }}</span>
+                <span class="product-qty__value" aria-live="polite">{{ $quantity }}</span>
 
-            <button type="button" wire:click="incrementQuantity" aria-label="زیاد کردن">+</button>
+                <button type="button" wire:click="incrementQuantity" aria-label="زیاد کردن">+</button>
 
-        </div>
+            </div>
+        @endif
 
-        <button type="button"
+        @if ($shopPricesHidden ?? false)
+            @if(filled($sitePhone ?? ''))
+                <a
+                    href="tel:{{ preg_replace('/[^\d+]/', '', $sitePhone) }}"
+                    class="product-add-cart flex-1 min-w-[200px] text-center product-add-cart--contact"
+                >
+                    تماس بگیرید
+                </a>
+            @else
+                <button
+                    type="button"
+                    disabled
+                    class="product-add-cart flex-1 min-w-[200px] opacity-60 cursor-not-allowed product-add-cart--contact"
+                >
+                    تماس بگیرید
+                </button>
+            @endif
+        @else
+            <button type="button"
 
-                wire:click="add"
+                    wire:click="add"
 
-                wire:loading.attr="disabled"
+                    wire:loading.attr="disabled"
 
-                wire:target="add"
+                    wire:target="add"
 
-                @disabled($selectedStock === 0)
+                    @disabled($selectedStock === 0)
 
-                class="product-add-cart flex-1 min-w-[200px] @if($selectedStock === 0) opacity-50 cursor-not-allowed @endif">
+                    class="product-add-cart flex-1 min-w-[200px] @if($selectedStock === 0) opacity-50 cursor-not-allowed @endif">
 
-            <span wire:loading.remove wire:target="add">افزودن به سبد خرید</span>
+                <span wire:loading.remove wire:target="add">افزودن به سبد خرید</span>
 
-            <span wire:loading wire:target="add">در حال افزودن...</span>
+                <span wire:loading wire:target="add">در حال افزودن...</span>
 
-        </button>
+            </button>
+        @endif
 
     </div>
 
 </div>
-
 

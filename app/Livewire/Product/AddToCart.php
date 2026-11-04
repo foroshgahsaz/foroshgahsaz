@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Services\Cart\CartService;
 use App\Services\Payment\PaymentGatewayCatalog;
 use App\Services\Settings\SettingsService;
+use App\Support\ShopLabels;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -91,6 +92,12 @@ class AddToCart extends Component
 
     public function add(CartService $cart): void
     {
+        if (ShopLabels::shopPricesHidden()) {
+            session()->flash('error', 'در حال حاضر خرید آنلاین غیرفعال است. لطفاً تماس بگیرید.');
+
+            return;
+        }
+
         if ($this->product->variants->isNotEmpty() && ! $this->variantId) {
             session()->flash('error', 'لطفاً واریانت محصول را انتخاب کنید.');
 
@@ -112,10 +119,14 @@ class AddToCart extends Component
         $showDigipayInstallmentPromo = ($digipay['enabled'] ?? false)
             && ($digipay['show_product_installment_promo'] ?? false);
 
+        $site = $settings->site();
+
         return view('livewire.product.add-to-cart', [
-            'showDigipayInstallmentPromo' => $showDigipayInstallmentPromo,
+            'showDigipayInstallmentPromo' => $showDigipayInstallmentPromo && ! ShopLabels::shopPricesHidden(),
             'digipayIconUrl' => $catalog->iconUrl('digipay'),
             'digipayInstallmentPromoText' => $digipay['product_installment_promo_text'] ?? '',
+            'shopPricesHidden' => ShopLabels::shopPricesHidden(),
+            'sitePhone' => is_string($site['phone'] ?? null) ? trim($site['phone']) : '',
         ]);
     }
 }
