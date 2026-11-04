@@ -7,7 +7,7 @@
                 </span>
                 <div>
                     <h2 id="ppu-site-sales-title" class="ppu-card__title">غیرفعال کردن فروش</h2>
-                    <p class="ppu-card__subtitle">با فعال بودن این گزینه، <strong>قیمت در کل سایت</strong> (لیست، صفحه محصول، سبد و تسویه) نمایش داده نمی‌شود.</p>
+                    <p class="ppu-card__subtitle">با فعال بودن این گزینه، <strong>قیمت در کل سایت</strong> پنهان می‌شود و دکمه خرید به <strong>تماس بگیرید</strong> تغییر می‌کند.</p>
                 </div>
             </header>
             <label class="ppu-site-sales-toggle">
