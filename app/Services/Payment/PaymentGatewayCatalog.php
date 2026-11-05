@@ -106,6 +106,7 @@ class PaymentGatewayCatalog
             'digipay' => (bool) ($this->settings->digipay()['enabled'] ?? false),
             'parsian' => (bool) ($this->settings->parsian()['enabled'] ?? false),
             'sadad' => (bool) ($this->settings->sadad()['enabled'] ?? false),
+            'toopi' => (bool) ($this->settings->toopi()['enabled'] ?? false),
             default => false,
         };
     }
@@ -176,6 +177,7 @@ class PaymentGatewayCatalog
                 'digipay' => $this->settings->digipay(),
                 'parsian' => $this->settings->parsian(),
                 'sadad' => $this->settings->sadad(),
+                'toopi' => $this->settings->toopi(),
                 default => [],
             };
 
@@ -224,6 +226,7 @@ class PaymentGatewayCatalog
             'digipay' => $this->settings->digipay()['icon'] ?? null,
             'parsian' => $this->settings->parsian()['icon'] ?? null,
             'sadad' => $this->settings->sadad()['icon'] ?? null,
+            'toopi' => $this->settings->toopi()['icon'] ?? null,
             default => null,
         };
 
@@ -255,6 +258,7 @@ class PaymentGatewayCatalog
             'digipay' => $this->settings->digipay(),
             'parsian' => $this->settings->parsian(),
             'sadad' => $this->settings->sadad(),
+            'toopi' => $this->settings->toopi(),
             default => [],
         };
     }

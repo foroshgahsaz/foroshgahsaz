@@ -94,6 +94,8 @@ class ShopLabels
             'bajet' => 'باجت‌پی',
             'digipay' => 'دیجی‌پی',
             'parsian' => 'پارسیان',
+            'sadad' => 'سداد',
+            'toopi' => 'توپی',
             default => $gateway ?? '—',
         };
     }

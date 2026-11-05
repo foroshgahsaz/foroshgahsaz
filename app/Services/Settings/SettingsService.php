@@ -33,6 +33,9 @@ class SettingsService
     protected static ?array $sadadMemo = null;
 
     /** @var array<string, mixed>|null */
+    protected static ?array $toopiMemo = null;
+
+    /** @var array<string, mixed>|null */
     protected static ?array $codMemo = null;
 
     public function get(string $group, string $key, mixed $default = null): mixed
@@ -57,9 +60,10 @@ class SettingsService
         static::$digipayMemo = null;
         static::$parsianMemo = null;
         static::$sadadMemo = null;
+        static::$toopiMemo = null;
         static::$codMemo = null;
 
-        if (in_array($group, ['zarinpal', 'tara', 'bajet', 'digipay', 'parsian', 'sadad', 'cod', 'homepage'], true)) {
+        if (in_array($group, ['zarinpal', 'tara', 'bajet', 'digipay', 'parsian', 'sadad', 'toopi', 'cod', 'homepage'], true)) {
             app(ShopCacheService::class)->forgetHome();
         }
     }
@@ -265,6 +269,33 @@ class SettingsService
             'icon' => $this->get('sadad', 'icon') ?: null,
             ...$this->gatewayCheckoutDisplayFields('sadad'),
             ...$this->gatewayHomepagePlanFields('sadad'),
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    public function toopi(): array
+    {
+        if (static::$toopiMemo !== null) {
+            return static::$toopiMemo;
+        }
+
+        $cfg = config('payment.gateways.toopi', []);
+
+        return static::$toopiMemo = [
+            'enabled' => filter_var($this->get('toopi', 'enabled', false), FILTER_VALIDATE_BOOLEAN),
+            'api_base_url' => rtrim((string) ($this->get('toopi', 'api_base_url') ?: ($cfg['api_base_url'] ?? '')), '/'),
+            'service_username' => (string) ($this->get('toopi', 'service_username') ?: ($cfg['service_username'] ?? '')),
+            'service_password' => (string) ($this->get('toopi', 'service_password') ?: ($cfg['service_password'] ?? '')),
+            'service_password_encrypted' => (string) ($this->get('toopi', 'service_password_encrypted') ?: ($cfg['service_password_encrypted'] ?? '')),
+            'merchant_number' => (string) ($this->get('toopi', 'merchant_number') ?: ($cfg['merchant_number'] ?? '')),
+            'public_key' => (string) ($this->get('toopi', 'public_key') ?: ($cfg['public_key'] ?? 'WtX3qPVc1lrHX/+ug9iILQ==')),
+            'amount_unit' => (string) ($this->get('toopi', 'amount_unit') ?: ($cfg['amount_unit'] ?? 'toman')),
+            'callback_url' => (string) ($this->get('toopi', 'callback_url') ?: ($cfg['callback_url'] ?? '/payment/callback/toopi')),
+            'test_mode' => filter_var($this->get('toopi', 'test_mode', $cfg['test_mode'] ?? false), FILTER_VALIDATE_BOOLEAN),
+            'test_cell_number' => (string) ($this->get('toopi', 'test_cell_number') ?: ($cfg['test_cell_number'] ?? '')),
+            'icon' => $this->get('toopi', 'icon') ?: null,
+            ...$this->gatewayCheckoutDisplayFields('toopi'),
+            ...$this->gatewayHomepagePlanFields('toopi'),
         ];
     }
 
