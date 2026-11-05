@@ -5,7 +5,7 @@ namespace App\Services\Payment;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
-class ToopiCpgClient
+class NopayCpgClient
 {
     public const SERVICE_REQUEST_TOKEN = 'CPG/Security/Token/RequestToken';
 
@@ -28,12 +28,12 @@ class ToopiCpgClient
             ]);
 
         if ($response->failed()) {
-            throw new RuntimeException('خطا در اتصال به درگاه توپی (HTTP '.$response->status().').');
+            throw new RuntimeException('خطا در اتصال به درگاه نوپی (HTTP '.$response->status().').');
         }
 
         $body = $response->json();
         if (! is_array($body)) {
-            throw new RuntimeException('پاسخ نامعتبر از درگاه توپی.');
+            throw new RuntimeException('پاسخ نامعتبر از درگاه نوپی.');
         }
 
         return $body;
@@ -65,7 +65,7 @@ class ToopiCpgClient
             return (string) $errors[0]['message'];
         }
 
-        return 'خطا در پاسخ درگاه توپی.';
+        return 'خطا در پاسخ درگاه نوپی.';
     }
 
     /**

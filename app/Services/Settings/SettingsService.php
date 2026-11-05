@@ -33,7 +33,7 @@ class SettingsService
     protected static ?array $sadadMemo = null;
 
     /** @var array<string, mixed>|null */
-    protected static ?array $toopiMemo = null;
+    protected static ?array $nopayMemo = null;
 
     /** @var array<string, mixed>|null */
     protected static ?array $codMemo = null;
@@ -60,10 +60,10 @@ class SettingsService
         static::$digipayMemo = null;
         static::$parsianMemo = null;
         static::$sadadMemo = null;
-        static::$toopiMemo = null;
+        static::$nopayMemo = null;
         static::$codMemo = null;
 
-        if (in_array($group, ['zarinpal', 'tara', 'bajet', 'digipay', 'parsian', 'sadad', 'toopi', 'cod', 'homepage'], true)) {
+        if (in_array($group, ['zarinpal', 'tara', 'bajet', 'digipay', 'parsian', 'sadad', 'nopay', 'cod', 'homepage'], true)) {
             app(ShopCacheService::class)->forgetHome();
         }
     }
@@ -273,29 +273,29 @@ class SettingsService
     }
 
     /** @return array<string, mixed> */
-    public function toopi(): array
+    public function nopay(): array
     {
-        if (static::$toopiMemo !== null) {
-            return static::$toopiMemo;
+        if (static::$nopayMemo !== null) {
+            return static::$nopayMemo;
         }
 
-        $cfg = config('payment.gateways.toopi', []);
+        $cfg = config('payment.gateways.nopay', []);
 
-        return static::$toopiMemo = [
-            'enabled' => filter_var($this->get('toopi', 'enabled', false), FILTER_VALIDATE_BOOLEAN),
-            'api_base_url' => rtrim((string) ($this->get('toopi', 'api_base_url') ?: ($cfg['api_base_url'] ?? '')), '/'),
-            'service_username' => (string) ($this->get('toopi', 'service_username') ?: ($cfg['service_username'] ?? '')),
-            'service_password' => (string) ($this->get('toopi', 'service_password') ?: ($cfg['service_password'] ?? '')),
-            'service_password_encrypted' => (string) ($this->get('toopi', 'service_password_encrypted') ?: ($cfg['service_password_encrypted'] ?? '')),
-            'merchant_number' => (string) ($this->get('toopi', 'merchant_number') ?: ($cfg['merchant_number'] ?? '')),
-            'public_key' => (string) ($this->get('toopi', 'public_key') ?: ($cfg['public_key'] ?? 'WtX3qPVc1lrHX/+ug9iILQ==')),
-            'amount_unit' => (string) ($this->get('toopi', 'amount_unit') ?: ($cfg['amount_unit'] ?? 'toman')),
-            'callback_url' => (string) ($this->get('toopi', 'callback_url') ?: ($cfg['callback_url'] ?? '/payment/callback/toopi')),
-            'test_mode' => filter_var($this->get('toopi', 'test_mode', $cfg['test_mode'] ?? false), FILTER_VALIDATE_BOOLEAN),
-            'test_cell_number' => (string) ($this->get('toopi', 'test_cell_number') ?: ($cfg['test_cell_number'] ?? '')),
-            'icon' => $this->get('toopi', 'icon') ?: null,
-            ...$this->gatewayCheckoutDisplayFields('toopi'),
-            ...$this->gatewayHomepagePlanFields('toopi'),
+        return static::$nopayMemo = [
+            'enabled' => filter_var($this->get('nopay', 'enabled') ?? $this->get('toopi', 'enabled', false), FILTER_VALIDATE_BOOLEAN),
+            'api_base_url' => rtrim((string) ($this->get('nopay', 'api_base_url') ?: $this->get('toopi', 'api_base_url') ?: ($cfg['api_base_url'] ?? '')), '/'),
+            'service_username' => (string) ($this->get('nopay', 'service_username') ?: $this->get('toopi', 'service_username') ?: ($cfg['service_username'] ?? '')),
+            'service_password' => (string) ($this->get('nopay', 'service_password') ?: $this->get('toopi', 'service_password') ?: ($cfg['service_password'] ?? '')),
+            'service_password_encrypted' => (string) ($this->get('nopay', 'service_password_encrypted') ?: $this->get('toopi', 'service_password_encrypted') ?: ($cfg['service_password_encrypted'] ?? '')),
+            'merchant_number' => (string) ($this->get('nopay', 'merchant_number') ?: $this->get('toopi', 'merchant_number') ?: ($cfg['merchant_number'] ?? '')),
+            'public_key' => (string) ($this->get('nopay', 'public_key') ?: $this->get('toopi', 'public_key') ?: ($cfg['public_key'] ?? 'WtX3qPVc1lrHX/+ug9iILQ==')),
+            'amount_unit' => (string) ($this->get('nopay', 'amount_unit') ?: $this->get('toopi', 'amount_unit') ?: ($cfg['amount_unit'] ?? 'toman')),
+            'callback_url' => (string) ($this->get('nopay', 'callback_url') ?: $this->get('toopi', 'callback_url') ?: ($cfg['callback_url'] ?? '/payment/callback/nopay')),
+            'test_mode' => filter_var($this->get('nopay', 'test_mode') ?? $this->get('toopi', 'test_mode', $cfg['test_mode'] ?? false), FILTER_VALIDATE_BOOLEAN),
+            'test_cell_number' => (string) ($this->get('nopay', 'test_cell_number') ?: $this->get('toopi', 'test_cell_number') ?: ($cfg['test_cell_number'] ?? '')),
+            'icon' => $this->get('nopay', 'icon') ?: $this->get('toopi', 'icon') ?: null,
+            ...$this->gatewayCheckoutDisplayFields('nopay'),
+            ...$this->gatewayHomepagePlanFields('nopay'),
         ];
     }
 
