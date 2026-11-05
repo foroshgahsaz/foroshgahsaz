@@ -5,7 +5,7 @@ use App\Services\Payment\DigiPayGateway;
 use App\Services\Payment\ParsianGateway;
 use App\Services\Payment\SadadGateway;
 use App\Services\Payment\TaraGateway;
-use App\Services\Payment\ToopiGateway;
+use App\Services\Payment\NopayGateway;
 use App\Services\Payment\ZarinpalGateway;
 
 return [
@@ -85,21 +85,21 @@ return [
             'default_product_type' => env('DIGIPAY_DEFAULT_PRODUCT_TYPE', 1),
         ],
 
-        'toopi' => [
-            'driver' => ToopiGateway::class,
+        'nopay' => [
+            'driver' => NopayGateway::class,
             'type' => 'credit',
-            'label' => 'توپی',
-            'description' => 'پرداخت اعتباری CPG (توپی — پیشگامان پویا)',
-            'api_base_url' => env('TOOPI_API_BASE_URL', ''),
-            'service_username' => env('TOOPI_SERVICE_USERNAME', ''),
-            'service_password' => env('TOOPI_SERVICE_PASSWORD', ''),
-            'service_password_encrypted' => env('TOOPI_SERVICE_PASSWORD_ENCRYPTED', ''),
-            'merchant_number' => env('TOOPI_MERCHANT_NUMBER', ''),
-            'public_key' => env('TOOPI_PUBLIC_KEY', 'WtX3qPVc1lrHX/+ug9iILQ=='),
-            'callback_url' => env('TOOPI_CALLBACK_URL', '/payment/callback/toopi'),
-            'amount_unit' => env('TOOPI_AMOUNT_UNIT', 'toman'),
-            'test_mode' => env('TOOPI_TEST_MODE', false),
-            'test_cell_number' => env('TOOPI_TEST_CELL_NUMBER', ''),
+            'label' => 'نوپی',
+            'description' => 'پرداخت اعتباری CPG (نوپی — پیشگامان پویا)',
+            'api_base_url' => env('NOPAY_API_BASE_URL', ''),
+            'service_username' => env('NOPAY_SERVICE_USERNAME', ''),
+            'service_password' => env('NOPAY_SERVICE_PASSWORD', ''),
+            'service_password_encrypted' => env('NOPAY_SERVICE_PASSWORD_ENCRYPTED', ''),
+            'merchant_number' => env('NOPAY_MERCHANT_NUMBER', ''),
+            'public_key' => env('NOPAY_PUBLIC_KEY', 'WtX3qPVc1lrHX/+ug9iILQ=='),
+            'callback_url' => env('NOPAY_CALLBACK_URL', '/payment/callback/nopay'),
+            'amount_unit' => env('NOPAY_AMOUNT_UNIT', 'toman'),
+            'test_mode' => env('NOPAY_TEST_MODE', false),
+            'test_cell_number' => env('NOPAY_TEST_CELL_NUMBER', ''),
         ],
 
         'tara' => [

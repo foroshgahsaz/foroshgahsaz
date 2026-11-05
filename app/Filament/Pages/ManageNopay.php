@@ -6,7 +6,7 @@ use App\Filament\Support\CrudSuccessNotification;
 use App\Filament\Support\GatewayCheckoutDisplayFields;
 use App\Filament\Support\GatewayHomepagePlanFields;
 use App\Filament\Support\ShopIconUpload;
-use App\Services\Payment\ToopiReturnUrl;
+use App\Services\Payment\NopayReturnUrl;
 use App\Services\Settings\SettingsService;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -14,17 +14,17 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 
-class ManageToopi extends Page implements HasForms
+class ManageNopay extends Page implements HasForms
 {
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
-    protected static ?string $navigationLabel = 'توپی';
+    protected static ?string $navigationLabel = 'نوپی';
 
-    protected static ?string $slug = 'toopi';
+    protected static ?string $slug = 'nopay';
 
-    protected static ?string $title = 'تنظیمات درگاه توپی (CPG)';
+    protected static ?string $title = 'تنظیمات درگاه نوپی (CPG)';
 
     protected static ?string $navigationGroup = 'درگاه‌ها';
 
@@ -38,23 +38,23 @@ class ManageToopi extends Page implements HasForms
 
     public function mount(SettingsService $settings): void
     {
-        $toopi = $settings->toopi();
+        $nopay = $settings->nopay();
 
         $this->form->fill([
-            'enabled' => $toopi['enabled'],
-            'api_base_url' => $toopi['api_base_url'],
-            'service_username' => $toopi['service_username'],
+            'enabled' => $nopay['enabled'],
+            'api_base_url' => $nopay['api_base_url'],
+            'service_username' => $nopay['service_username'],
             'service_password' => '',
-            'service_password_encrypted' => $toopi['service_password_encrypted'],
-            'merchant_number' => $toopi['merchant_number'],
-            'public_key' => $toopi['public_key'],
-            'amount_unit' => $toopi['amount_unit'],
-            'callback_url' => $toopi['callback_url'],
-            'test_mode' => $toopi['test_mode'],
-            'test_cell_number' => $toopi['test_cell_number'],
-            'icon' => ShopIconUpload::forForm($toopi['icon'] ?? null),
-            ...GatewayCheckoutDisplayFields::mountState($toopi),
-            ...GatewayHomepagePlanFields::mountState($toopi),
+            'service_password_encrypted' => $nopay['service_password_encrypted'],
+            'merchant_number' => $nopay['merchant_number'],
+            'public_key' => $nopay['public_key'],
+            'amount_unit' => $nopay['amount_unit'],
+            'callback_url' => $nopay['callback_url'],
+            'test_mode' => $nopay['test_mode'],
+            'test_cell_number' => $nopay['test_cell_number'],
+            'icon' => ShopIconUpload::forForm($nopay['icon'] ?? null),
+            ...GatewayCheckoutDisplayFields::mountState($nopay),
+            ...GatewayHomepagePlanFields::mountState($nopay),
         ]);
     }
 
@@ -62,14 +62,14 @@ class ManageToopi extends Page implements HasForms
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('درگاه توپی (CPG Ver 2-5)')->schema([
+                Forms\Components\Section::make('درگاه نوپی (CPG Ver 2-5)')->schema([
                     Forms\Components\Toggle::make('enabled')
-                        ->label('فعال‌سازی درگاه توپی')
+                        ->label('فعال‌سازی درگاه نوپی')
                         ->helperText('مستند: docs/CPG Ver 2-5.pdf — RequestToken و VerifyTransaction'),
                     Forms\Components\TextInput::make('api_base_url')
                         ->label('آدرس پایه API')
                         ->placeholder('https://example.com')
-                        ->helperText('طبق نامه/onboarding توپی — POST با ServiceName در body')
+                        ->helperText('طبق نامه/onboarding نوپی — POST با ServiceName در body')
                         ->columnSpanFull()
                         ->required(),
                     Forms\Components\TextInput::make('service_username')
@@ -102,7 +102,7 @@ class ManageToopi extends Page implements HasForms
                         ->required(),
                     Forms\Components\TextInput::make('callback_url')
                         ->label('returnURL / Callback')
-                        ->placeholder('/payment/callback/toopi'),
+                        ->placeholder('/payment/callback/nopay'),
                     Forms\Components\Toggle::make('test_mode')
                         ->label('محیط تست')
                         ->helperText('در تست از test_cell_number استفاده می‌شود؛ OTP نمونه در مستند: 123456'),
@@ -122,8 +122,8 @@ class ManageToopi extends Page implements HasForms
     {
         $data = $this->form->getState();
 
-        $callbackPath = ToopiReturnUrl::path([
-            'callback_url' => $data['callback_url'] ?? '/payment/callback/toopi',
+        $callbackPath = NopayReturnUrl::path([
+            'callback_url' => $data['callback_url'] ?? '/payment/callback/nopay',
         ]);
 
         $payload = [
@@ -149,11 +149,11 @@ class ManageToopi extends Page implements HasForms
             $payload['service_password'] = (string) $data['service_password'];
         }
 
-        $settings->setMany('toopi', $payload);
+        $settings->setMany('nopay', $payload);
 
         CrudSuccessNotification::saved()
             ->title('ذخیره شد')
-            ->body('تنظیمات درگاه توپی با موفقیت ذخیره شد.')
+            ->body('تنظیمات درگاه نوپی با موفقیت ذخیره شد.')
             ->send();
     }
 }

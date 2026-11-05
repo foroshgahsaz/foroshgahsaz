@@ -8,23 +8,23 @@ use App\Services\Order\OrderActivityLogger;
 use App\Services\Settings\SettingsService;
 use RuntimeException;
 
-class ToopiGateway implements PaymentGatewayInterface
+class NopayGateway implements PaymentGatewayInterface
 {
     public function __construct(
         protected PaymentActivityLogger $paymentLog,
         protected PaymentAuditLogger $audit,
         protected OrderActivityLogger $orderLog,
         protected SettingsService $settings,
-        protected ToopiCpgClient $client,
-        protected ToopiCpgPasswordEncryptor $passwordEncryptor,
+        protected NopayCpgClient $client,
+        protected NopayCpgPasswordEncryptor $passwordEncryptor,
     ) {}
 
     public function initiate(Payment $payment, Order $order): string
     {
-        $config = $this->settings->toopi();
+        $config = $this->settings->nopay();
 
         if (! ($config['enabled'] ?? false)) {
-            throw new RuntimeException('درگاه توپی فعال نیست.');
+            throw new RuntimeException('درگاه نوپی فعال نیست.');
         }
 
         $this->assertConfig($config);
@@ -33,7 +33,7 @@ class ToopiGateway implements PaymentGatewayInterface
 
         $cellNumber = $this->resolveCellNumber($config, $order);
         if ($cellNumber === '') {
-            throw new RuntimeException('شماره موبایل مشتری برای پرداخت توپی الزامی است.');
+            throw new RuntimeException('شماره موبایل مشتری برای پرداخت نوپی الزامی است.');
         }
 
         $amountUnit = (string) ($config['amount_unit'] ?? AmountConverter::UNIT_TOMAN);
@@ -46,15 +46,15 @@ class ToopiGateway implements PaymentGatewayInterface
             'servicePassword' => $encryptedPassword,
             'cellNumber' => $cellNumber,
             'amount' => $amount,
-            'returnURL' => ToopiReturnUrl::absolute($config, $payment),
+            'returnURL' => NopayReturnUrl::absolute($config, $payment),
             'merchantNumber' => (string) $config['merchant_number'],
         ];
 
         $this->audit->step(
             $payment,
             PaymentAuditStep::GATEWAY_REQUEST,
-            'toopi_request_token',
-            'درخواست Token به CPG توپی ارسال شد.',
+            'nopay_request_token',
+            'درخواست Token به CPG نوپی ارسال شد.',
             [
                 'amount' => $amount,
                 'cell_number' => $cellNumber,
@@ -64,7 +64,7 @@ class ToopiGateway implements PaymentGatewayInterface
         try {
             $response = $this->client->call(
                 (string) $config['api_base_url'],
-                ToopiCpgClient::SERVICE_REQUEST_TOKEN,
+                NopayCpgClient::SERVICE_REQUEST_TOKEN,
                 $input,
             );
         } catch (RuntimeException $e) {
@@ -87,7 +87,7 @@ class ToopiGateway implements PaymentGatewayInterface
         if ($token === '' || $redirectUrl === '') {
             $this->markInitiateFailed($payment, $order, $response);
 
-            throw new RuntimeException('پاسخ توکن/redirect از درگاه توپی ناقص است.');
+            throw new RuntimeException('پاسخ توکن/redirect از درگاه نوپی ناقص است.');
         }
 
         $payment->update([
@@ -98,15 +98,15 @@ class ToopiGateway implements PaymentGatewayInterface
         $this->audit->step(
             $payment->fresh(),
             PaymentAuditStep::GATEWAY_RESPONSE,
-            'toopi_token_received',
-            'Token از درگاه توپی دریافت شد.',
+            'nopay_token_received',
+            'Token از درگاه نوپی دریافت شد.',
             ['token' => $token],
             $response
         );
 
         $this->paymentLog->gatewayResponse(
             $payment->fresh(),
-            'کاربر به درگاه توپی هدایت شد.',
+            'کاربر به درگاه نوپی هدایت شد.',
             ['redirect_url' => $redirectUrl]
         );
 
@@ -115,11 +115,11 @@ class ToopiGateway implements PaymentGatewayInterface
 
     public function verify(Payment $payment, string $authority, string $status): GatewayVerificationResult
     {
-        $config = $this->settings->toopi();
+        $config = $this->settings->nopay();
 
         $token = trim($authority !== '' ? $authority : (string) $payment->transaction_id);
         if ($token === '') {
-            return GatewayVerificationResult::failed([], 'توکن پرداخت توپی یافت نشد.');
+            return GatewayVerificationResult::failed([], 'توکن پرداخت نوپی یافت نشد.');
         }
 
         if ($payment->transaction_id && $token !== $payment->transaction_id) {
@@ -144,21 +144,21 @@ class ToopiGateway implements PaymentGatewayInterface
         $this->audit->step(
             $payment,
             PaymentAuditStep::GATEWAY_REQUEST,
-            'toopi_verify_request',
-            'درخواست VerifyTransaction به توپی ارسال شد.',
+            'nopay_verify_request',
+            'درخواست VerifyTransaction به نوپی ارسال شد.',
             ['token' => $token]
         );
 
         try {
             $response = $this->client->call(
                 (string) ($config['api_base_url'] ?? ''),
-                ToopiCpgClient::SERVICE_VERIFY,
+                NopayCpgClient::SERVICE_VERIFY,
                 $input,
             );
         } catch (RuntimeException $e) {
             return GatewayVerificationResult::failed(
                 ['exception' => $e->getMessage()],
-                'خطا در تأیید تراکنش توپی.'
+                'خطا در تأیید تراکنش نوپی.'
             );
         }
 
@@ -178,7 +178,7 @@ class ToopiGateway implements PaymentGatewayInterface
         if (! $approved) {
             return GatewayVerificationResult::canceled(
                 $response,
-                'تراکنش توپی تأیید نشد.'
+                'تراکنش نوپی تأیید نشد.'
             );
         }
 
@@ -203,7 +203,7 @@ class ToopiGateway implements PaymentGatewayInterface
     {
         foreach (['api_base_url', 'service_username', 'merchant_number'] as $key) {
             if (trim((string) ($config[$key] ?? '')) === '') {
-                throw new RuntimeException('تنظیمات درگاه توپی ناقص است.');
+                throw new RuntimeException('تنظیمات درگاه نوپی ناقص است.');
             }
         }
 
@@ -211,7 +211,7 @@ class ToopiGateway implements PaymentGatewayInterface
         $hasPlain = trim((string) ($config['service_password'] ?? '')) !== '';
 
         if (! $hasEncrypted && ! $hasPlain) {
-            throw new RuntimeException('رمز سرویس توپی تنظیم نشده است.');
+            throw new RuntimeException('رمز سرویس نوپی تنظیم نشده است.');
         }
     }
 
@@ -255,8 +255,8 @@ class ToopiGateway implements PaymentGatewayInterface
         $this->audit->failure(
             $payment->fresh(),
             PaymentAuditStep::GATEWAY_RESPONSE,
-            'toopi_request_failed',
-            'درخواست Token توپی ناموفق بود.',
+            'nopay_request_failed',
+            'درخواست Token نوپی ناموفق بود.',
             null,
             is_array($raw) ? $raw : ['error' => (string) $raw],
             is_array($raw) ? $raw : ['error' => (string) $raw]

@@ -4,7 +4,7 @@ namespace App\Services\Payment;
 
 use App\Models\Payment;
 
-class ToopiReturnUrl
+class NopayReturnUrl
 {
     /**
      * @param  array<string, mixed>  $config
@@ -21,15 +21,15 @@ class ToopiReturnUrl
      */
     public static function path(array $config): string
     {
-        $callback = trim((string) ($config['callback_url'] ?? '/payment/callback/toopi'));
+        $callback = trim((string) ($config['callback_url'] ?? '/payment/callback/nopay'));
         if ($callback === '') {
-            $callback = '/payment/callback/toopi';
+            $callback = '/payment/callback/nopay';
         }
 
         if (str_starts_with($callback, 'http://') || str_starts_with($callback, 'https://')) {
             $parsed = parse_url($callback);
 
-            return ($parsed['path'] ?? '/payment/callback/toopi')
+            return ($parsed['path'] ?? '/payment/callback/nopay')
                 .(isset($parsed['query']) ? '?'.$parsed['query'] : '');
         }
 

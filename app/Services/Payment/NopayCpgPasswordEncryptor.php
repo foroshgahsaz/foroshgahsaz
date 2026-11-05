@@ -4,7 +4,7 @@ namespace App\Services\Payment;
 
 use RuntimeException;
 
-class ToopiCpgPasswordEncryptor
+class NopayCpgPasswordEncryptor
 {
     /**
      * رمز سرویس طبق مستند CPG (رمزنگاری با publicKey) — در صورت شکست، از فیلد «رمز رمزنگاری‌شده» در ادمین استفاده کنید.
@@ -18,7 +18,7 @@ class ToopiCpgPasswordEncryptor
 
         $keyMaterial = trim($publicKeyMaterial);
         if ($keyMaterial === '') {
-            throw new RuntimeException('کلید عمومی توپی تنظیم نشده است.');
+            throw new RuntimeException('کلید عمومی نوپی تنظیم نشده است.');
         }
 
         $publicKey = $this->toPublicKeyPem($keyMaterial);

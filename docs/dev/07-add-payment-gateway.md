@@ -6,7 +6,7 @@
 
 - الگوهای موجود: `ZarinpalGateway` (نقدی REST)، `ParsianGateway` (نقدی SOAP / PEC)، `SadadGateway` (نقدی JSON / سداد)، `TaraGateway` (اعتباری + redirect میانی).
 - مستندات درگاه سداد در repo: `docs/PHP-master.zip`، `docs/15470-51A234D3-CD9B-4DEB-8D6A-F9D72518FCB9.pdf`.
-- درگاه **توپی (CPG)**: `docs/CPG Ver 2-5.pdf` — `ToopiGateway`، `RequestToken` + `VerifyTransaction`.
+- درگاه **نوپی (CPG)**: `docs/CPG Ver 2-5.pdf` — `NopayGateway`، `RequestToken` + `VerifyTransaction`.
 - قرارداد: `app/Services/Payment/PaymentGatewayInterface.php`
   - `initiate(Payment, Order): string` — URL یا مسیر redirect
   - `verify(Payment, authority, status): GatewayVerificationResult`

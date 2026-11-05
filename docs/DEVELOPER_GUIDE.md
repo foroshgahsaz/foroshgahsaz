@@ -653,20 +653,20 @@ $middleware->validateCsrfTokens(except: [
 
 **OrderId** = `payments.id` (مثل پارسیان).
 
-### 9.14 درگاه توپی (credit — CPG Ver 2-5)
+### 9.14 درگاه نوپی (credit — CPG Ver 2-5)
 
 | مورد | مقدار |
 |------|--------|
-| نام config | `toopi` |
+| نام config | `nopay` |
 | type | `credit` |
-| کلاس | `ToopiGateway`، `ToopiCpgClient`، `ToopiCpgPasswordEncryptor` |
-| Admin | `/admin/toopi` → `ManageToopi.php` |
-| Callback | `/payment/callback/toopi` — تأیید با API `VerifyTransaction` و `token` ذخیره‌شده |
+| کلاس | `NopayGateway`، `NopayCpgClient`، `NopayCpgPasswordEncryptor` |
+| Admin | `/admin/nopay` → `ManageNopay.php` |
+| Callback | `/payment/callback/nopay` — تأیید با API `VerifyTransaction` و `token` ذخیره‌شده |
 | مستند | `docs/CPG Ver 2-5.pdf` |
 
 **جریان:** `CPG/Security/Token/RequestToken` (موبایل، amount، returnURL) → redirect به `redirectURL` → callback → `CPG/Financial/VerifyTransaction`.
 
-**تنظیمات:** `api_base_url` (از نامه توپی)، `service_username`, `service_password_encrypted` (ترجیحاً), `merchant_number`, `public_key`, `test_mode`, `test_cell_number`.
+**تنظیمات:** `api_base_url` (از نامه نوپی)، `service_username`, `service_password_encrypted` (ترجیحاً), `merchant_number`, `public_key`, `test_mode`, `test_cell_number`.
 
 ---
 
@@ -1375,7 +1375,7 @@ resources/views/layouts/shop.blade.php
 | 2026-10-29 | اسلاگ محصول از نام: `SlugFromTitle` — فقط space/NBSP/tab/خط‌جدید → `-` (نه `\h`؛ حروف فارسی/لاتین حفظ) |
 | 2026-10-29 | ادمین محصول: URL ویرایش با **id** (`getRecordRouteKeyName`، `getUrl`، لیست/ریدایrect/create) — فروشگاه همچنان slug |
 | 2026-10-29 | فرم محصول: `_slug_name_source` — اسلاگ دستی حفظ می‌شود؛ همگام با نام فقط وقتی اسلاگ از نام ساخته شده |
-| 2026-11-05 | درگاه **توپی** (`ToopiGateway`, CPG Ver 2-5): `RequestToken` / `VerifyTransaction`؛ admin `/admin/toopi`؛ callback `/payment/callback/toopi`؛ مستند `docs/CPG Ver 2-5.pdf` |
+| 2026-11-05 | درگاه **نوپی** (`NopayGateway`, CPG Ver 2-5): `RequestToken` / `VerifyTransaction`؛ admin `/admin/nopay`؛ callback `/payment/callback/nopay`؛ مستند `docs/CPG Ver 2-5.pdf` |
 | 2026-10-31 | درگاه **سداد** (`SadadGateway`): IPG JSON بانک ملی — `PaymentRequest` / `Verify`، SignData DES-EDE3؛ admin `/admin/sadad`؛ callback `/payment/callback/sadad`؛ مستندات `docs/PHP-master.zip` |
 | 2026-10-31 | MediaPicker: اکشن‌های `openMediaCenter` / `clearImage` ثابت روی هر فیلد (Filament با `mountFormComponentAction(statePath, name)` کامپوننت را پیدا می‌کند؛ نام هش‌شده با state path باعث unmount خالی می‌شد) |
 | 2026-10-31 | اسلایدر hero hub دسکتاپ: نمایش و آپلود **940×406** (`aspect-ratio` + preset `sliders`)؛ موبایل 750×400 (نمایش ≈989×388) |

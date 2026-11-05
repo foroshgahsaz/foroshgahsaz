@@ -53,7 +53,7 @@ class PaymentController extends Controller
         return $this->handleCallback($request);
     }
 
-    public function toopiCallback(Request $request)
+    public function nopayCallback(Request $request)
     {
         return $this->handleCallback($request);
     }
@@ -112,7 +112,7 @@ class PaymentController extends Controller
                 ),
             ]);
             $payment = $payment->fresh();
-        } elseif ($payment->gateway === 'toopi') {
+        } elseif (in_array($payment->gateway, ['nopay', 'toopi'], true)) {
             $authority = (string) (
                 $request->input('token')
                 ?: $request->input('Token')

@@ -10,7 +10,7 @@ use App\Filament\Pages\ManageDigiPay;
 use App\Filament\Pages\ManageParsian;
 use App\Filament\Pages\ManageCodPayment;
 use App\Filament\Pages\ManageSadad;
-use App\Filament\Pages\ManageToopi;
+use App\Filament\Pages\ManageNopay;
 use App\Filament\Pages\ManageTara;
 use App\Filament\Pages\ManageZarinpal;
 use App\Filament\Pages\ViewDatabaseBackups;
@@ -78,7 +78,7 @@ class AdminPanelProvider extends PanelProvider
                 ManageDigiPay::class,
                 ManageParsian::class,
                 ManageSadad::class,
-                ManageToopi::class,
+                ManageNopay::class,
                 ManageCodPayment::class,
                 ViewPaymentLogs::class,
                 ViewSiteErrorLogs::class,
