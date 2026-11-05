@@ -110,6 +110,7 @@ Route::match(['get', 'post'], '/payment/callback/digipay', [PaymentController::c
 Route::match(['get', 'post'], '/payment/callback/parsian', [PaymentController::class, 'parsianCallback'])->name('payment.callback.parsian');
 Route::match(['get', 'post'], '/payment/callback/pec', [PaymentController::class, 'parsianCallback'])->name('payment.callback.pec');
 Route::match(['get', 'post'], '/payment/callback/sadad', [PaymentController::class, 'sadadCallback'])->name('payment.callback.sadad');
+Route::match(['get', 'post'], '/payment/callback/toopi', [PaymentController::class, 'toopiCallback'])->name('payment.callback.toopi');
 Route::get('/payment/tara/{tracking}', [PaymentController::class, 'taraRedirect'])->name('payment.tara.redirect');
 Route::get('/payment/result/{payment:tracking_code}', [PaymentResultController::class, 'show'])
     ->middleware('signed')

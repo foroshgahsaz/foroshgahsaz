@@ -15,6 +15,7 @@
     use App\Filament\Pages\ManageTara;
     use App\Filament\Pages\ManageParsian;
     use App\Filament\Pages\ManageSadad;
+    use App\Filament\Pages\ManageToopi;
     use App\Filament\Pages\ManageCodPayment;
     use App\Filament\Pages\ManageZarinpal;
     use App\Filament\Resources\AttributeResource;
@@ -250,6 +251,7 @@
                 'filament.admin.pages.digipay',
                 'filament.admin.pages.parsian',
                 'filament.admin.pages.sadad',
+                'filament.admin.pages.toopi',
                 'filament.admin.pages.cod',
             ],
             'menus' => [
@@ -258,6 +260,7 @@
                     ['label' => 'زرین‌پال', 'url' => ManageZarinpal::getUrl(), 'icon' => 'fa-university'],
                     ['label' => 'پارسیان', 'url' => ManageParsian::getUrl(), 'icon' => 'fa-building-columns'],
                     ['label' => 'سداد', 'url' => ManageSadad::getUrl(), 'icon' => 'fa-building-columns'],
+                    ['label' => 'توپی', 'url' => ManageToopi::getUrl(), 'icon' => 'fa-wallet'],
                     ['label' => 'تارا', 'url' => ManageTara::getUrl(), 'icon' => 'fa-wallet'],
                     ['label' => 'باجت‌پی', 'url' => ManageBajetPay::getUrl(), 'icon' => 'fa-credit-card'],
                     ['label' => 'دیجی‌پی', 'url' => ManageDigiPay::getUrl(), 'icon' => 'fa-credit-card'],

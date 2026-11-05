@@ -53,6 +53,11 @@ class PaymentController extends Controller
         return $this->handleCallback($request);
     }
 
+    public function toopiCallback(Request $request)
+    {
+        return $this->handleCallback($request);
+    }
+
     public function taraRedirect(string $tracking, TaraGateway $gateway, SettingsService $settings)
     {
         $model = Payment::query()
@@ -100,6 +105,20 @@ class PaymentController extends Controller
         } elseif ($payment->gateway === 'sadad') {
             $authority = (string) ($request->input('token') ?: $request->input('Token') ?: $payment->transaction_id);
             $status = (string) $request->input('ResCode', '');
+            $payment->update([
+                'raw_response' => array_merge(
+                    is_array($payment->raw_response) ? $payment->raw_response : [],
+                    ['callback' => $request->except(['payment'])]
+                ),
+            ]);
+            $payment = $payment->fresh();
+        } elseif ($payment->gateway === 'toopi') {
+            $authority = (string) (
+                $request->input('token')
+                ?: $request->input('Token')
+                ?: $payment->transaction_id
+            );
+            $status = (string) ($request->input('status') ?: $request->input('Status') ?: '');
             $payment->update([
                 'raw_response' => array_merge(
                     is_array($payment->raw_response) ? $payment->raw_response : [],
