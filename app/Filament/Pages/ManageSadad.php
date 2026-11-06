@@ -84,7 +84,7 @@ class ManageSadad extends Page implements HasForms
                     Forms\Components\TextInput::make('callback_url')
                         ->label('آدرس ReturnUrl / Callback')
                         ->placeholder('/payment/callback/sadad')
-                        ->helperText('مسیر بازگشت از درگاه؛ OrderId برابر payments.id است.'),
+                        ->helperText('مسیر بازگشت از درگاه؛ رایج: /payment/callback/sadad. اگر پنل بانک فقط `/payment/callback/bmi` را قبول کرد، همان را بگذارید (هر دو در سایت پشتیبانی می‌شوند).'),
                     ShopIconUpload::make('icon', 'gateway-icons', 'آیکون درگاه')
                         ->columnSpanFull(),
                 ])->columns(2),

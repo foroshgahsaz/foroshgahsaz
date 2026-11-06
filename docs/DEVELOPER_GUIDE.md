@@ -644,7 +644,7 @@ $middleware->validateCsrfTokens(except: [
 | type | `cash` |
 | کلاس | `SadadGateway`، `SadadIpgClient`، `SadadSign` |
 | Admin | `/admin/sadad` → `ManageSadad.php` |
-| Callback | `/payment/callback/sadad` (POST — `token`, `ResCode`, `OrderId`) |
+| Callback | `/payment/callback/sadad` (POST — `token`, `ResCode`, `OrderId`)؛ نام مستعار `/payment/callback/bmi` همان کنترلر |
 | مستندات پروژه | `docs/PHP-master.zip`، `docs/15470-51A234D3-CD9B-4DEB-8D6A-F9D72518FCB9.pdf`؛ [راهنمای سداد](https://sadadpsp.ir/ipg-dargah-pardakht) |
 
 **جریان:** `PaymentRequest` (JSON + SignData Triple-DES) → redirect `sadad.shaparak.ir/VPG/Purchase?Token=…` → callback → `Advice/Verify`.
@@ -1376,6 +1376,7 @@ resources/views/layouts/shop.blade.php
 | 2026-10-29 | ادمین محصول: URL ویرایش با **id** (`getRecordRouteKeyName`، `getUrl`، لیست/ریدایrect/create) — فروشگاه همچنان slug |
 | 2026-10-29 | فرم محصول: `_slug_name_source` — اسلاگ دستی حفظ می‌شود؛ همگام با نام فقط وقتی اسلاگ از نام ساخته شده |
 | 2026-11-05 | درگاه **نوپی** (`NopayGateway`, CPG Ver 2-5): `RequestToken` / `VerifyTransaction`؛ admin `/admin/nopay`؛ callback `/payment/callback/nopay`؛ مستند `docs/CPG Ver 2-5.pdf` |
+| 2026-11-06 | سداد / بانک ملی: مسیر مستعار `/payment/callback/bmi` → همان `sadadCallback` (برای ReturnUrl ثبت‌شده در پنل بانک) |
 | 2026-10-31 | درگاه **سداد** (`SadadGateway`): IPG JSON بانک ملی — `PaymentRequest` / `Verify`، SignData DES-EDE3؛ admin `/admin/sadad`؛ callback `/payment/callback/sadad`؛ مستندات `docs/PHP-master.zip` |
 | 2026-10-31 | MediaPicker: اکشن‌های `openMediaCenter` / `clearImage` ثابت روی هر فیلد (Filament با `mountFormComponentAction(statePath, name)` کامپوننت را پیدا می‌کند؛ نام هش‌شده با state path باعث unmount خالی می‌شد) |
 | 2026-10-31 | اسلایدر hero hub دسکتاپ: نمایش و آپلود **940×406** (`aspect-ratio` + preset `sliders`)؛ موبایل 750×400 (نمایش ≈989×388) |

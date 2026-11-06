@@ -110,6 +110,8 @@ Route::match(['get', 'post'], '/payment/callback/digipay', [PaymentController::c
 Route::match(['get', 'post'], '/payment/callback/parsian', [PaymentController::class, 'parsianCallback'])->name('payment.callback.parsian');
 Route::match(['get', 'post'], '/payment/callback/pec', [PaymentController::class, 'parsianCallback'])->name('payment.callback.pec');
 Route::match(['get', 'post'], '/payment/callback/sadad', [PaymentController::class, 'sadadCallback'])->name('payment.callback.sadad');
+/** Alias برای پنل بانک ملی / سداد وقتی ReturnUrl به‌صورت `/payment/callback/bmi` ثبت شده */
+Route::match(['get', 'post'], '/payment/callback/bmi', [PaymentController::class, 'sadadCallback'])->name('payment.callback.bmi');
 Route::match(['get', 'post'], '/payment/callback/nopay', [PaymentController::class, 'nopayCallback'])->name('payment.callback.nopay');
 Route::match(['get', 'post'], '/payment/callback/toopi', [PaymentController::class, 'nopayCallback'])->name('payment.callback.toopi');
 Route::get('/payment/tara/{tracking}', [PaymentController::class, 'taraRedirect'])->name('payment.tara.redirect');
