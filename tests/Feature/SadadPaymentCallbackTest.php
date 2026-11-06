@@ -69,6 +69,32 @@ class SadadPaymentCallbackTest extends TestCase
         $this->assertSame(Payment::STATUS_CANCELED, $payment->fresh()->status);
     }
 
+    /** پنل بانک ملی گاهی فقط مسیر `/payment/callback/bmi` را می‌پذیرد؛ باید همان کنترلر سداد اجرا شود. */
+    public function test_sadad_failed_callback_works_on_bmi_alias_path(): void
+    {
+        [$user, $order] = $this->makeUserAndOrder();
+        $token = 'sadad-token-bmi-fail';
+
+        $payment = Payment::query()->create([
+            'order_id' => $order->id,
+            'user_id' => $user->id,
+            'amount' => 50_000,
+            'gateway' => 'sadad',
+            'status' => Payment::STATUS_PENDING,
+            'tracking_code' => 'SADADBMI1',
+            'transaction_id' => $token,
+        ]);
+
+        $response = $this->post('/payment/callback/bmi?'.http_build_query(['payment' => 'SADADBMI1']), [
+            'token' => $token,
+            'ResCode' => '1',
+            'OrderId' => (string) $payment->id,
+        ]);
+
+        $response->assertRedirect();
+        $this->assertSame(Payment::STATUS_CANCELED, $payment->fresh()->status);
+    }
+
     /**
      * @return array{0: User, 1: Order}
      */

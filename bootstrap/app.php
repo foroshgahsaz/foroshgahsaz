@@ -21,6 +21,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
             'payment/callback/parsian',
             'payment/callback/pec',
             'payment/callback/sadad',
+            'payment/callback/bmi',
             'payment/callback/nopay',
             'payment/callback/toopi',
         ]);
